@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EstateHub.ph — Logo Plan & Concept Drafts</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#0E1A2C; --ink:#091120; --card-navy:#16243A;
+    --gold:#E3A94D; --champagne:#F2CE8C; --porcelain:#F5F2EB;
+    --slate:#93A0B4; --teal:#2F8F7C; --line:#243450;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{font-family:'Inter',sans-serif; background:var(--ink); color:#E9EDF3; line-height:1.6;}
+  .wrap{max-width:1080px; margin:0 auto; padding:48px 32px 80px;}
+  h1,h2,h3{font-family:'Montserrat',sans-serif;}
+  h1{font-size:34px; font-weight:700; letter-spacing:.02em;}
+  h2{font-size:22px; font-weight:600; margin:56px 0 8px; color:var(--champagne); letter-spacing:.04em;}
+  h2 .num{color:var(--gold); margin-right:10px;}
+  h3{font-size:16px; font-weight:600; margin:20px 0 6px;}
+  p.lead{color:var(--slate); max-width:70ch;}
+  .kicker{color:var(--gold); font-size:12px; letter-spacing:.35em; text-transform:uppercase; margin-bottom:10px; font-weight:600;}
+  .rule{height:3px; width:64px; background:var(--gold); margin:18px 0 26px; border-radius:2px;}
+  .muted{color:var(--slate); font-size:14px;}
+  .chips{display:flex; flex-wrap:wrap; gap:10px; margin-top:14px;}
+  .chip{border:1px solid var(--line); border-radius:999px; padding:6px 16px; font-size:13px; color:#CBD5E1;}
+  .chip b{color:var(--gold); font-weight:600;}
+
+  .palette{display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:14px; margin-top:18px;}
+  .swatch{border-radius:12px; overflow:hidden; border:1px solid var(--line);}
+  .swatch .color{height:74px;}
+  .swatch .meta{padding:10px 12px; background:var(--card-navy); font-size:12px;}
+  .swatch .meta b{display:block; font-size:13px;}
+  .swatch .meta span{color:var(--slate);}
+
+  .typo{background:var(--card-navy); border:1px solid var(--line); border-radius:14px; padding:26px 28px; margin-top:16px;}
+  .typo .wordmark{font-family:'Montserrat',sans-serif; font-size:30px; letter-spacing:.32em; color:#fff;}
+  .typo .wordmark .w1{font-weight:300;} .typo .wordmark .w2{font-weight:700;} .typo .wordmark .ph{color:var(--gold); font-weight:600;}
+  .typo .spec{margin-top:10px;}
+
+  .concept{background:var(--card-navy); border:1px solid var(--line); border-radius:16px; padding:28px; margin-top:22px;}
+  .concept .tag{display:inline-block; font-size:11px; letter-spacing:.25em; color:var(--ink); background:var(--gold); border-radius:4px; padding:3px 10px; font-weight:700; margin-bottom:10px; font-family:'Montserrat',sans-serif;}
+  .concept p{color:var(--slate); font-size:14px; max-width:75ch;}
+  .stage{display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:18px;}
+  .panel{border-radius:12px; padding:30px 24px; display:flex; align-items:center; justify-content:center; min-height:150px; border:1px solid var(--line);}
+  .panel.dark{background:linear-gradient(160deg,#101E33,#0B1626);}
+  .panel.light{background:var(--porcelain);}
+  .panel .lockup{display:flex; align-items:center; gap:16px;}
+  .wm{font-family:'Montserrat',sans-serif; font-size:19px; letter-spacing:.28em; white-space:nowrap;}
+  .wm .w1{font-weight:300;} .wm .w2{font-weight:700;} .wm .ph{color:var(--gold); font-weight:600;}
+  .panel.dark .wm{color:#fff;} .panel.light .wm{color:var(--navy);}
+  .sizes{display:flex; align-items:flex-end; gap:22px; margin-top:16px;}
+  .sizes .s{display:flex; flex-direction:column; align-items:center; gap:6px; font-size:11px; color:var(--slate);}
+  .caption{font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:var(--slate); margin-top:10px; text-align:center;}
+
+  .twocol{display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:16px;}
+  .box{background:var(--card-navy); border:1px solid var(--line); border-radius:14px; padding:22px 24px;}
+  .box h3{margin-top:0;}
+  .box ul{list-style:none; margin-top:8px;}
+  .box li{font-size:14px; color:#CBD5E1; padding:5px 0 5px 22px; position:relative;}
+  .box.do li::before{content:"✓"; position:absolute; left:0; color:var(--teal); font-weight:700;}
+  .box.dont li::before{content:"✕"; position:absolute; left:0; color:#C6635B; font-weight:700;}
+  .rec{border-left:4px solid var(--gold); background:var(--card-navy); border-radius:0 14px 14px 0; padding:22px 26px; margin-top:18px;}
+  .rec b{color:var(--champagne);}
+  ol.next{margin:14px 0 0 20px;}
+  ol.next li{padding:4px 0; color:#CBD5E1; font-size:14px;}
+  @media(max-width:760px){ .stage,.twocol{grid-template-columns:1fr;} }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="kicker">Brand Identity Plan · July 2026</div>
+  <h1>EstateHub<span style="color:var(--gold)">.ph</span> — Logo Plan &amp; Concept Drafts</h1>
+  <div class="rule"></div>
+  <p class="lead">Four draft directions built from your existing homepage design — the midnight-navy and gold palette, the letterspaced wordmark, and the "Trusted. Secure. Committed." promise. Everything below is a starting point for reaction: pick a direction, mix elements, or reject all four and we iterate.</p>
+
+  <h2><span class="num">01</span>Brand Foundation</h2>
+  <p class="lead">Positioning drawn from your mockup: <em>premium, trust-first Philippine real estate — building generational wealth, one move at a time.</em> The logo should feel established and secure (bank-like) rather than playful (startup-like), while staying clean enough for a favicon and a mobile app icon.</p>
+  <div class="chips">
+    <span class="chip"><b>Trustworthy</b> — institutional, stable</span>
+    <span class="chip"><b>Premium</b> — gold accents, generous spacing</span>
+    <span class="chip"><b>Modern</b> — geometric, flat, no gradients in the mark</span>
+    <span class="chip"><b>Filipino</b> — the .PH is part of the brand, not an afterthought</span>
+  </div>
+
+  <h2><span class="num">02</span>Color Palette</h2>
+  <p class="lead">Sampled and normalized from your homepage. Rule of thumb: navy is the house, gold is the key — gold is reserved for emphasis (the mark, the .PH, primary CTAs) and never used for large fills except the Contact button.</p>
+  <div class="palette">
+    <div class="swatch"><div class="color" style="background:#0E1A2C"></div><div class="meta"><b>Midnight Navy</b><span>#0E1A2C · primary</span></div></div>
+    <div class="swatch"><div class="color" style="background:#091120"></div><div class="meta"><b>Deep Ink</b><span>#091120 · backgrounds</span></div></div>
+    <div class="swatch"><div class="color" style="background:#E3A94D"></div><div class="meta"><b>Estate Gold</b><span>#E3A94D · accent / CTA</span></div></div>
+    <div class="swatch"><div class="color" style="background:#F2CE8C"></div><div class="meta"><b>Champagne</b><span>#F2CE8C · gold tint</span></div></div>
+    <div class="swatch"><div class="color" style="background:#F5F2EB"></div><div class="meta"><b>Porcelain</b><span>#F5F2EB · light bg</span></div></div>
+    <div class="swatch"><div class="color" style="background:#2F8F7C"></div><div class="meta"><b>Trust Teal</b><span>#2F8F7C · optional secondary</span></div></div>
+  </div>
+
+  <h2><span class="num">03</span>Typography</h2>
+  <div class="typo">
+    <div class="wordmark"><span class="w1">ESTATE</span><span class="w2">HUB</span><span class="ph">.PH</span></div>
+    <div class="rule" style="margin:16px 0 12px;"></div>
+    <p class="spec muted">Wordmark: <b style="color:#E9EDF3">Montserrat</b> — ESTATE in Light (300), HUB in Bold (700), .PH in SemiBold gold. Tracking ≈ +0.30em, all caps. The light/bold contrast makes "HUB" the anchor without adding a second font. UI/body companion: <b style="color:#E9EDF3">Inter</b>. Free Google Fonts, so web, app, and print all match.</p>
+  </div>
+
+  <h2><span class="num">04</span>Concept Drafts</h2>
+
+  <!-- CONCEPT A -->
+  <div class="concept">
+    <span class="tag">CONCEPT A · RECOMMENDED</span>
+    <h3>The Hub Frame — EH monogram</h3>
+    <p>An E and H fused into one geometric mark by a shared crossbar — reads as a floor-plan grid or building elevation. Compact, ownable, and instantly legible at 16px. This is the most versatile direction: strong as a favicon, app icon, watermark, and signage.</p>
+    <div class="stage">
+      <div class="panel dark">
+        <div class="lockup">
+          <svg width="72" height="72" viewBox="0 0 96 96"><rect width="96" height="96" rx="20" fill="#0E1A2C" stroke="#243450"/><g stroke="#E3A94D" stroke-width="7"><line x1="30" y1="26" x2="30" y2="70"/><line x1="66" y1="26" x2="66" y2="70"/><line x1="26.5" y1="26" x2="52" y2="26"/><line x1="26.5" y1="70" x2="52" y2="70"/><line x1="30" y1="48" x2="66" y2="48"/></g></svg>
+          <div class="wm"><span class="w1">ESTATE</span><span class="w2">HUB</span><span class="ph">.PH</span></div>
+        </div>
+      </div>
+      <div class="panel light">
+        <div class="lockup">
+          <svg width="72" height="72" viewBox="0 0 96 96"><rect width="96" height="96" rx="20" fill="#0E1A2C"/><g stroke="#E3A94D" stroke-width="7"><line x1="30" y1="26" x2="30" y2="70"/><line x1="66" y1="26" x2="66" y2="70"/><line x1="26.5" y1="26" x2="52" y2="26"/><line x1="26.5" y1="70" x2="52" y2="70"/><line x1="30" y1="48" x2="66" y2="48"/></g></svg>
+          <div class="wm"><span class="w1">ESTATE</span><span class="w2">HUB</span><span class="ph">.PH</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="sizes">
+      <div class="s"><svg width="48" height="48" viewBox="0 0 96 96"><rect width="96" height="96" rx="20" fill="#0E1A2C"/><g stroke="#E3A94D" stroke-width="7"><line x1="30" y1="26" x2="30" y2="70"/><line x1="66" y1="26" x2="66" y2="70"/><line x1="26.5" y1="26" x2="52" y2="26"/><line x1="26.5" y1="70" x2="52" y2="70"/><line x1="30" y1="48" x2="66" y2="48"/></g></svg>48px</div>
+      <div class="s"><svg width="32" height="32" viewBox="0 0 96 96"><rect width="96" height="96" rx="20" fill="#0E1A2C"/><g stroke="#E3A94D" stroke-width="8"><line x1="30" y1="26" x2="30" y2="70"/><line x1="66" y1="26" x2="66" y2="70"/><line x1="26" y1="26" x2="52" y2="26"/><line x1="26" y1="70" x2="52" y2="70"/><line x1="30" y1="48" x2="66" y2="48"/></g></svg>32px</div>
+      <div class="s"><svg width="16" height="16" viewBox="0 0 96 96"><rect width="96" height="96" rx="24" fill="#0E1A2C"/><g stroke="#E3A94D" stroke-width="10"><line x1="30" y1="26" x2="30" y2="70"/><line x1="66" y1="26" x2="66" y2="70"/><line x1="25" y1="26" x2="52" y2="26"/><line x1="25" y1="70" x2="52" y2="70"/><line x1="30" y1="48" x2="66" y2="48"/></g></svg>16px favicon</div>
+    </div>
+  </div>
+
+  <!-- CONCEPT B -->
+  <div class="concept">
+    <span class="tag">CONCEPT B</span>
+    <h3>Golden Tower — skyline icon + wordmark</h3>
+    <p>A minimal three-building skyline with the center tower in gold — the "wealth beacon" among the city. Echoes the skyline photography of your homepage hero. Friendlier and more literal than Concept A; a good fit if you want visitors to instantly read "real estate" with zero interpretation.</p>
+    <div class="stage">
+      <div class="panel dark">
+        <div class="lockup">
+          <svg width="72" height="72" viewBox="0 0 96 96"><rect width="96" height="96" rx="20" fill="#0E1A2C" stroke="#243450"/><rect x="21" y="44" width="14" height="30" fill="#31486B"/><rect x="61" y="50" width="14" height="24" fill="#31486B"/><rect x="40" y="26" width="16" height="48" fill="#E3A94D"/><g fill="#0E1A2C"><rect x="44" y="33" width="3" height="3"/><rect x="49" y="33" width="3" height="3"/><rect x="44" y="41" width="3" height="3"/><rect x="49" y="41" width="3" height="3"/><rect x="44" y="49" width="3" height="3"/><rect x="49" y="49" width="3" height="3"/></g><line x1="16" y1="74" x2="80" y2="74" stroke="#E3A94D" stroke-width="3"/></svg>
+          <div class="wm"><span class="w1">ESTATE</span><span class="w2">HUB</span><span class="ph">.PH</span></div>
+        </div>
+      </div>
+      <div class="panel light">
+        <div class="lockup">
+          <svg width="72" height="72" viewBox="0 0 96 96"><rect width="96" height="96" rx="20" fill="#0E1A2C"/><rect x="21" y="44" width="14" height="30" fill="#31486B"/><rect x="61" y="50" width="14" height="24" fill="#31486B"/><rect x="40" y="26" width="16" height="48" fill="#E3A94D"/><g fill="#0E1A2C"><rect x="44" y="33" width="3" height="3"/><rect x="49" y="33" width="3" height="3"/><rect x="44" y="41" width="3" height="3"/><rect x="49" y="41" width="3" height="3"/><rect x="44" y="49" width="3" height="3"/><rect x="49" y="49" width="3" height="3"/></g><line x1="16" y1="74" x2="80" y2="74" stroke="#E3A94D" stroke-width="3"/></svg>
+          <div class="wm"><span class="w1">ESTATE</span><span class="w2">HUB</span><span class="ph">.PH</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="sizes">
+      <div class="s"><svg width="48" height="48" viewBox="0 0 96 96"><rect width="96" height="96" rx="20" fill="#0E1A2C"/><rect x="21" y="44" width="14" height="30" fill="#31486B"/><rect x="61" y="50" width="14" height="24" fill="#31486B"/><rect x="40" y="26" width="16" height="48" fill="#E3A94D"/><line x1="16" y1="74" x2="80" y2="74" stroke="#E3A94D" stroke-width="3"/></svg>48px</div>
+      <div class="s"><svg width="32" height="32" viewBox="0 0 96 96"><rect width="96" height="96" rx="20" fill="#0E1A2C"/><rect x="21" y="44" width="14" height="30" fill="#31486B"/><rect x="61" y="50" width="14" height="24" fill="#31486B"/><rect x="40" y="26" width="16" height="48" fill="#E3A94D"/><line x1="16" y1="74" x2="80" y2="74" stroke="#E3A94D" stroke-width="4"/></svg>32px</div>
+      <div class="s"><svg width="16" height="16" viewBox="0 0 96 96"><rect width="96" height="96" rx="24" fill="#0E1A2C"/><rect x="18" y="44" width="16" height="30" fill="#31486B"/><rect x="62" y="50" width="16" height="24" fill="#31486B"/><rect x="39" y="24" width="18" height="50" fill="#E3A94D"/></svg>16px favicon</div>
+    </div>
+  </div>
+
+  <!-- CONCEPT C -->
+  <div class="concept">
+    <span class="tag">CONCEPT C</span>
+    <h3>Pure Wordmark — refined header treatment</h3>
+    <p>A polished version of what your mockup already uses: letterspaced caps with a weight shift on HUB and the gold .PH, anchored by your gold underline accent. Cleanest and cheapest to implement — but weak as a square icon, so it needs Concept A or D as a companion mark for favicon and app-icon use.</p>
+    <div class="stage">
+      <div class="panel dark">
+        <div style="text-align:center">
+          <div class="wm" style="font-size:24px"><span class="w1">ESTATE</span><span class="w2">HUB</span><span class="ph">.PH</span></div>
+          <div style="height:3px;width:56px;background:var(--gold);margin:12px auto 0;border-radius:2px"></div>
+        </div>
+      </div>
+      <div class="panel light">
+        <div style="text-align:center">
+          <div class="wm" style="font-size:24px"><span class="w1">ESTATE</span><span class="w2">HUB</span><span class="ph">.PH</span></div>
+          <div style="height:3px;width:56px;background:var(--gold);margin:12px auto 0;border-radius:2px"></div>
+        </div>
+      </div>
+    </div>
+    <p class="caption">Pairs with tagline lockup: "TRUSTED · SECURE · COMMITTED"</p>
+  </div>
+
+  <!-- CONCEPT D -->
+  <div class="concept">
+    <span class="tag">CONCEPT D</span>
+    <h3>The Estate Crest — shield mark</h3>
+    <p>A gold-line shield holding a roofline and floor bars — a direct extension of the shield icon and "Trusted. Secure. Committed." footer already on your homepage. The most institutional of the four; strongest if your positioning leans heavily on security and escrow-grade trust (e.g. handling payments, verified titles). Risk: shields are common in PH banking/insurance, so it's the least distinctive direction.</p>
+    <div class="stage">
+      <div class="panel dark">
+        <div class="lockup">
+          <svg width="72" height="72" viewBox="0 0 96 96"><rect width="96" height="96" rx="20" fill="#0E1A2C" stroke="#243450"/><path d="M48 13 L77 23 V49 C77 66 64 77 48 85 C32 77 19 66 19 49 V23 Z" fill="none" stroke="#E3A94D" stroke-width="4.5"/><path d="M33 47 L48 33 L63 47" fill="none" stroke="#E3A94D" stroke-width="5"/><line x1="36" y1="56" x2="60" y2="56" stroke="#E3A94D" stroke-width="5"/><line x1="36" y1="65" x2="60" y2="65" stroke="#E3A94D" stroke-width="5"/></svg>
+          <div class="wm"><span class="w1">ESTATE</span><span class="w2">HUB</span><span class="ph">.PH</span></div>
+        </div>
+      </div>
+      <div class="panel light">
+        <div class="lockup">
+          <svg width="72" height="72" viewBox="0 0 96 96"><rect width="96" height="96" rx="20" fill="#0E1A2C"/><path d="M48 13 L77 23 V49 C77 66 64 77 48 85 C32 77 19 66 19 49 V23 Z" fill="none" stroke="#E3A94D" stroke-width="4.5"/><path d="M33 47 L48 33 L63 47" fill="none" stroke="#E3A94D" stroke-width="5"/><line x1="36" y1="56" x2="60" y2="56" stroke="#E3A94D" stroke-width="5"/><line x1="36" y1="65" x2="60" y2="65" stroke="#E3A94D" stroke-width="5"/></svg>
+          <div class="wm"><span class="w1">ESTATE</span><span class="w2">HUB</span><span class="ph">.PH</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="sizes">
+      <div class="s"><svg width="48" height="48" viewBox="0 0 96 96"><rect width="96" height="96" rx="20" fill="#0E1A2C"/><path d="M48 13 L77 23 V49 C77 66 64 77 48 85 C32 77 19 66 19 49 V23 Z" fill="none" stroke="#E3A94D" stroke-width="5"/><path d="M33 47 L48 33 L63 47" fill="none" stroke="#E3A94D" stroke-width="5.5"/><line x1="36" y1="56" x2="60" y2="56" stroke="#E3A94D" stroke-width="5.5"/><line x1="36" y1="65" x2="60" y2="65" stroke="#E3A94D" stroke-width="5.5"/></svg>48px</div>
+      <div class="s"><svg width="32" height="32" viewBox="0 0 96 96"><rect width="96" height="96" rx="20" fill="#0E1A2C"/><path d="M48 13 L77 23 V49 C77 66 64 77 48 85 C32 77 19 66 19 49 V23 Z" fill="none" stroke="#E3A94D" stroke-width="6"/><path d="M33 47 L48 33 L63 47" fill="none" stroke="#E3A94D" stroke-width="6"/><line x1="36" y1="58" x2="60" y2="58" stroke="#E3A94D" stroke-width="6"/></svg>32px</div>
+      <div class="s"><svg width="16" height="16" viewBox="0 0 96 96"><rect width="96" height="96" rx="24" fill="#0E1A2C"/><path d="M48 13 L77 23 V49 C77 66 64 77 48 85 C32 77 19 66 19 49 V23 Z" fill="none" stroke="#E3A94D" stroke-width="8"/><path d="M33 49 L48 34 L63 49" fill="none" stroke="#E3A94D" stroke-width="8"/></svg>16px favicon</div>
+    </div>
+  </div>
+
+  <h2><span class="num">05</span>Usage Rules</h2>
+  <div class="twocol">
+    <div class="box do">
+      <h3 style="color:var(--teal)">Do</h3>
+      <ul>
+        <li>Use the gold mark on navy, or the navy-tile mark on light backgrounds — never gold on white without the tile</li>
+        <li>Keep clear space around the mark equal to the height of the "H" in the wordmark</li>
+        <li>Use the icon alone only at small sizes (favicon, avatar, app icon); pair with the wordmark everywhere else</li>
+        <li>Keep .PH in gold in every lockup — it's part of the brand name</li>
+      </ul>
+    </div>
+    <div class="box dont">
+      <h3 style="color:#C6635B">Don't</h3>
+      <ul>
+        <li>Don't add gradients, shadows, or outlines to the mark — flat only</li>
+        <li>Don't recolor the mark teal or white-on-gold; gold-on-navy is the identity</li>
+        <li>Don't stretch, rotate, or set the wordmark in a different font</li>
+        <li>Don't place the mark over busy photography without the navy tile behind it</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2><span class="num">06</span>Recommendation &amp; Next Steps</h2>
+  <div class="rec">
+    <p style="color:#E9EDF3"><b>Recommended path:</b> Concept A (Hub Frame monogram) as the primary mark, paired with Concept C's wordmark as the full lockup. It's the most distinctive at every size, it encodes both "EstateHub" initials and a building grid, and it avoids the two crowded clichés of the category — literal rooftops and shields. Keep Concept D's shield only as a small "verified/secure" badge inside the product, not as the logo.</p>
+  </div>
+  <ol class="next">
+    <li>Pick a direction (or a mix — e.g. Concept B's icon with A's tighter geometry) and tell me what to change: proportions, corner radius, stroke weight, colors.</li>
+    <li>I refine the chosen mark and export a full kit: master SVG, PNGs (512/192/48/32/16), favicon.ico, app icon, and dark/light lockup variants.</li>
+    <li>Drop the final lockup into your homepage header mockup so you can see it in context before committing.</li>
+  </ol>
+
+  <p class="muted" style="margin-top:48px; border-top:1px solid var(--line); padding-top:18px;">Drafts generated July 2026 · Fonts: Montserrat + Inter (Google Fonts, free for commercial use) · All marks are original geometric constructions — run a trademark/logo search in PH before finalizing.</p>
+</div>
+</body>
+</html>

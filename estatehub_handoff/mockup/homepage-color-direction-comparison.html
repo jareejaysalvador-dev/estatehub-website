@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EstateHub.ph — Accent Color Direction Comparison</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#0E1A2C; --ink:#091120; --card-navy:#16243A; --line:#243450;
+    --gold:#E3A94D; --champagne:#F2CE8C;
+    --emerald:#22B573; --emerald-deep:#178A57; --mint:#8FDCBD;
+    --slate:#93A0B4;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{font-family:'Inter',sans-serif; background:#0b1220; color:#E9EDF3; padding:44px 24px 60px;}
+  h1{font-family:'Montserrat',sans-serif; font-size:19px; font-weight:700; text-align:center; margin-bottom:8px; color:#fff;}
+  p.sub{text-align:center; color:var(--slate); font-size:12.5px; margin-bottom:40px;}
+  .row{display:flex; gap:28px; justify-content:center; flex-wrap:wrap; align-items:flex-start;}
+  .col{width:300px;}
+  .label{text-align:center; font-family:'Montserrat',sans-serif; font-size:11px; letter-spacing:.1em; text-transform:uppercase; font-weight:700; margin-bottom:12px;}
+  .label.current{color:var(--champagne);}
+  .label.proposed{color:var(--mint);}
+  .phone{border-radius:18px; overflow:hidden; border:1px solid var(--line); background:linear-gradient(165deg,#16243a 0%,var(--navy) 45%,var(--ink) 100%);}
+  .nav{display:flex; align-items:center; justify-content:space-between; padding:16px 16px 0;}
+  .wm{font-family:'Montserrat',sans-serif; font-size:12.5px; letter-spacing:.2em; font-weight:300; color:#fff;}
+  .wm b{font-weight:700;}
+  .burger span{display:block; width:18px; height:2px; background:#fff; margin:3.5px 0;}
+  .hero{padding:22px 16px 18px;}
+  h2{font-family:'Montserrat',sans-serif; font-size:22px; font-weight:700; color:#fff;}
+  h2 .line{display:block; line-height:1.2;}
+  .rule{height:3px; width:40px; border-radius:2px; margin:12px 0 16px;}
+  .cards{padding:0 12px; display:flex; flex-direction:column; gap:7px;}
+  .card{position:relative; background:var(--card-navy); border-radius:7px; height:46px; display:flex; align-items:center; overflow:hidden;}
+  .wedge{position:absolute; inset:0; width:55%; clip-path:polygon(0 0, 100% 0, 40% 100%, 0 100%);}
+  .card .txt{position:relative; z-index:1; margin-left:52px; font-family:'Montserrat',sans-serif; font-size:10.5px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:#fff;}
+  .card .arrow{position:absolute; right:14px; top:50%; transform:translateY(-50%); font-size:14px; z-index:1;}
+  .cta{margin:14px 12px 0; height:44px; border-radius:7px; display:flex; align-items:center; justify-content:space-between; padding:0 16px; font-family:'Montserrat',sans-serif; font-size:11px; font-weight:700; letter-spacing:.08em;}
+  .footer{padding:18px 16px 20px;}
+  .frule{height:2px; width:26px; margin-bottom:8px;}
+  .ftext{font-size:9px; letter-spacing:.14em; color:var(--slate); text-transform:uppercase;}
+
+  .current .accent{color:var(--gold);}
+  .current .rule{background:var(--gold);}
+  .current .w-lease{background:linear-gradient(120deg,#2f5fd6,#1b3a86);}
+  .current .w-pm{background:linear-gradient(120deg,#1EA96B,#0d6b45);}
+  .current .w-sales{background:linear-gradient(120deg,#3a3fc9,#1c1f7a);}
+  .current .w-biz{background:linear-gradient(120deg,var(--gold),#a9772f);}
+  .current .arrow{color:var(--gold);}
+  .current .cta{background:var(--gold); color:var(--ink);}
+  .current .frule{background:var(--gold);}
+  .current .wm .ph{color:var(--gold); font-weight:600;}
+
+  .proposed .accent{color:var(--emerald);}
+  .proposed .rule{background:var(--emerald);}
+  .proposed .w-lease{background:linear-gradient(120deg,#2f5fd6,#1b3a86);}
+  .proposed .w-pm{background:linear-gradient(120deg,#1EA96B,#0d6b45);}
+  .proposed .w-sales{background:linear-gradient(120deg,#3a3fc9,#1c1f7a);}
+  .proposed .w-biz{background:linear-gradient(120deg,var(--emerald),var(--emerald-deep));}
+  .proposed .arrow{color:var(--emerald);}
+  .proposed .cta{background:var(--emerald); color:var(--ink);}
+  .proposed .frule{background:var(--emerald);}
+  .proposed .wm .ph{color:var(--emerald); font-weight:600;}
+
+  @media(max-width:660px){ .row{gap:20px;} }
+</style>
+</head>
+<body>
+<h1>EstateHub.ph — accent color direction</h1>
+<p class="sub">Same layout &amp; copy as the founder's homepage mockup. Photography omitted here — colors only.</p>
+<div class="row">
+
+  <div class="col current">
+    <div class="label current">Current — gold (mismatched with logo)</div>
+    <div class="phone">
+      <div class="nav">
+        <div class="wm">ESTATE<b>HUB</b><span class="ph">.PH</span></div>
+        <div class="burger"><span></span><span></span><span></span></div>
+      </div>
+      <div class="hero">
+        <h2>
+          <span class="line">Building</span>
+          <span class="line accent">generational</span>
+          <span class="line accent">wealth,</span>
+          <span class="line">one move</span>
+          <span class="line">at a time.</span>
+        </h2>
+        <div class="rule"></div>
+      </div>
+      <div class="cards">
+        <div class="card"><div class="wedge w-lease"></div><div class="txt">Lease</div><div class="arrow">→</div></div>
+        <div class="card"><div class="wedge w-pm"></div><div class="txt">Property Mgmt</div><div class="arrow">→</div></div>
+        <div class="card"><div class="wedge w-sales"></div><div class="txt">Sales</div><div class="arrow">→</div></div>
+        <div class="card"><div class="wedge w-biz"></div><div class="txt">Business Solutions</div><div class="arrow">→</div></div>
+      </div>
+      <div class="cta"><span>Contact us</span><span>→</span></div>
+      <div class="footer">
+        <div class="frule"></div>
+        <div class="ftext">Trusted. Secure. Committed.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col proposed">
+    <div class="label proposed">Proposed — full emerald</div>
+    <div class="phone">
+      <div class="nav">
+        <div class="wm">ESTATE<b>HUB</b><span class="ph">.PH</span></div>
+        <div class="burger"><span></span><span></span><span></span></div>
+      </div>
+      <div class="hero">
+        <h2>
+          <span class="line">Building</span>
+          <span class="line accent">generational</span>
+          <span class="line accent">wealth,</span>
+          <span class="line">one move</span>
+          <span class="line">at a time.</span>
+        </h2>
+        <div class="rule"></div>
+      </div>
+      <div class="cards">
+        <div class="card"><div class="wedge w-lease"></div><div class="txt">Lease</div><div class="arrow">→</div></div>
+        <div class="card"><div class="wedge w-pm"></div><div class="txt">Property Mgmt</div><div class="arrow">→</div></div>
+        <div class="card"><div class="wedge w-sales"></div><div class="txt">Sales</div><div class="arrow">→</div></div>
+        <div class="card"><div class="wedge w-biz"></div><div class="txt">Business Solutions</div><div class="arrow">→</div></div>
+      </div>
+      <div class="cta"><span>Contact us</span><span>→</span></div>
+      <div class="footer">
+        <div class="frule"></div>
+        <div class="ftext">Trusted. Secure. Committed.</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
