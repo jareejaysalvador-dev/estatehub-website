@@ -7,7 +7,7 @@ export function FeaturedProperties() {
   const featured = LISTINGS.slice(0, 4);
 
   return (
-    <section className="border-y border-hairline bg-white/40 py-16 lg:py-24">
+    <section className="overflow-x-hidden border-y border-hairline bg-white/40 py-16 lg:py-24">
       <div className="mx-auto max-w-7xl px-6">
         <Reveal>
           <div className="flex flex-wrap items-baseline justify-between gap-3">

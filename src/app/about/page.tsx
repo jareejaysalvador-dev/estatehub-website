@@ -49,17 +49,23 @@ export default function AboutPage() {
         </div>
       </Reveal>
 
-      <Reveal delay={0.06} className="mt-14 lg:mt-20">
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-          {PRINCIPLES.map((principle) => (
-            <div key={principle.title} className="rounded-2xl border border-hairline bg-white p-6">
-              <principle.icon size={24} weight="light" className="text-emerald-deep" aria-hidden="true" />
-              <h2 className="mt-3 text-base font-semibold text-ink">{principle.title}</h2>
-              <p className="mt-2 text-sm text-slate">{principle.detail}</p>
+      <div className="mt-14 flex max-w-2xl flex-col lg:mt-20">
+        {PRINCIPLES.map((principle, i) => (
+          <Reveal key={principle.title} delay={i * 0.06}>
+            <div
+              className={`flex gap-4 py-6 ${i === 0 ? "pt-0" : "border-t border-hairline"}`}
+            >
+              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-emerald/12 text-emerald-deep">
+                <principle.icon size={20} weight="light" aria-hidden="true" />
+              </span>
+              <div>
+                <h2 className="text-base font-semibold text-ink">{principle.title}</h2>
+                <p className="mt-1 text-sm text-slate">{principle.detail}</p>
+              </div>
             </div>
-          ))}
-        </div>
-      </Reveal>
+          </Reveal>
+        ))}
+      </div>
 
       <Reveal delay={0.1} className="mt-14 lg:mt-20">
         <h2 className="text-[22px] font-bold tracking-tight text-ink lg:text-[28px]">
