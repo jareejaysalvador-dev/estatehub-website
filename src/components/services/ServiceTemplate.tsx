@@ -1,11 +1,27 @@
 import Link from "next/link";
-import { CaretDown } from "@phosphor-icons/react/dist/ssr";
+import { CaretDown, CaretRight } from "@phosphor-icons/react/dist/ssr";
 import { Reveal } from "@/components/Reveal";
 import type { ServiceContent } from "@/data/services";
 
 export function ServiceTemplate({ service }: { service: ServiceContent }) {
   return (
     <div className="mx-auto max-w-7xl px-6 py-12 lg:py-16">
+      <nav aria-label="Breadcrumb" className="mb-6 hidden text-sm text-slate lg:block">
+        <ol className="flex items-center gap-1.5">
+          <li>
+            <Link href="/" className="hover:text-ink">
+              Home
+            </Link>
+          </li>
+          <CaretRight size={12} weight="bold" aria-hidden="true" />
+          <li>Services</li>
+          <CaretRight size={12} weight="bold" aria-hidden="true" />
+          <li aria-current="page" className="text-ink">
+            {service.label}
+          </li>
+        </ol>
+      </nav>
+
       <Reveal>
         <div className="max-w-2xl">
           <p className="text-sm font-medium text-emerald-deep">

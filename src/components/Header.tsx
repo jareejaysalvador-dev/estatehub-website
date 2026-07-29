@@ -88,6 +88,20 @@ export function Header() {
     setSearchOpen(false);
   }
 
+  // Active-section indication (UX rec #1: "the user should always be able
+  // to tell which section they're in"). Exact match for top-level pages;
+  // prefix match for /properties so a listing detail page still shows
+  // Properties as current.
+  function isActive(href: string) {
+    return pathname === href || pathname.startsWith(`${href}/`);
+  }
+  const propertiesActive = isActive("/properties");
+  const servicesActive = pathname.startsWith("/services/");
+  const overseasActive = isActive("/overseas");
+  const aboutActive = isActive("/about");
+  const activeLinkClass = "text-ink underline underline-offset-4";
+  const inactiveLinkClass = "text-ink/80 hover:text-ink";
+
   // Services dropdown: outside click + Esc + arrow keys
   useEffect(() => {
     if (!servicesOpen) return;
@@ -177,7 +191,8 @@ export function Header() {
         <nav aria-label="Primary" className="hidden flex-1 items-center gap-6 lg:flex">
           <Link
             href="/properties"
-            className="text-sm font-medium text-ink/80 transition-colors hover:text-ink"
+            aria-current={propertiesActive ? "page" : undefined}
+            className={`text-sm font-medium transition-colors ${propertiesActive ? activeLinkClass : inactiveLinkClass}`}
           >
             Properties
           </Link>
@@ -188,8 +203,9 @@ export function Header() {
               type="button"
               aria-expanded={servicesOpen}
               aria-haspopup="true"
+              aria-current={servicesActive ? "page" : undefined}
               onClick={() => setServicesOpen((v) => !v)}
-              className="flex min-h-11 items-center gap-1 text-sm font-medium text-ink/80 transition-colors hover:text-ink"
+              className={`flex min-h-11 items-center gap-1 text-sm font-medium transition-colors ${servicesActive ? activeLinkClass : inactiveLinkClass}`}
             >
               Services
               <CaretDown
@@ -219,13 +235,15 @@ export function Header() {
 
           <Link
             href="/overseas"
-            className="text-sm font-medium text-ink/80 transition-colors hover:text-ink"
+            aria-current={overseasActive ? "page" : undefined}
+            className={`text-sm font-medium transition-colors ${overseasActive ? activeLinkClass : inactiveLinkClass}`}
           >
             Overseas Buyers
           </Link>
           <Link
             href="/about"
-            className="text-sm font-medium text-ink/80 transition-colors hover:text-ink"
+            aria-current={aboutActive ? "page" : undefined}
+            className={`text-sm font-medium transition-colors ${aboutActive ? activeLinkClass : inactiveLinkClass}`}
           >
             About
           </Link>
@@ -289,25 +307,41 @@ export function Header() {
           className="border-t border-hairline bg-porcelain px-6 py-4 lg:hidden"
         >
           <nav aria-label="Primary mobile" className="flex flex-col">
-            <Link href="/properties" className="flex min-h-12 items-center text-base text-ink/90">
+            <Link
+              href="/properties"
+              aria-current={propertiesActive ? "page" : undefined}
+              className={`flex min-h-12 items-center text-base ${propertiesActive ? "font-semibold text-ink" : "text-ink/90"}`}
+            >
               Properties
             </Link>
             <p className="mt-2 text-sm font-semibold uppercase tracking-wide text-slate">
               Services
             </p>
-            {SERVICES.map((s) => (
-              <Link
-                key={s.href}
-                href={s.href}
-                className="flex min-h-12 items-center pl-4 text-base text-ink/90"
-              >
-                {s.label}
-              </Link>
-            ))}
-            <Link href="/overseas" className="flex min-h-12 items-center text-base text-ink/90">
+            {SERVICES.map((s) => {
+              const active = pathname === s.href;
+              return (
+                <Link
+                  key={s.href}
+                  href={s.href}
+                  aria-current={active ? "page" : undefined}
+                  className={`flex min-h-12 items-center pl-4 text-base ${active ? "font-semibold text-ink" : "text-ink/90"}`}
+                >
+                  {s.label}
+                </Link>
+              );
+            })}
+            <Link
+              href="/overseas"
+              aria-current={overseasActive ? "page" : undefined}
+              className={`flex min-h-12 items-center text-base ${overseasActive ? "font-semibold text-ink" : "text-ink/90"}`}
+            >
               Overseas Buyers
             </Link>
-            <Link href="/about" className="flex min-h-12 items-center text-base text-ink/90">
+            <Link
+              href="/about"
+              aria-current={aboutActive ? "page" : undefined}
+              className={`flex min-h-12 items-center text-base ${aboutActive ? "font-semibold text-ink" : "text-ink/90"}`}
+            >
               About
             </Link>
           </nav>
