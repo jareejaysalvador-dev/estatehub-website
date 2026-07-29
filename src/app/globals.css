@@ -1,0 +1,103 @@
+@import "tailwindcss";
+
+/*
+  EstateHub.ph design tokens.
+  Source of truth: estatehub_handoff/analysis/ui-design-system.md (locked,
+  incl. two a11y amendments: per-surface focus ring, Slate input borders).
+  Porcelain-first: light content surfaces, navy reserved for structural
+  moments (nav, hero, overseas band, footer).
+*/
+
+:root {
+  --color-porcelain: #f5f2eb;
+  --color-navy: #0e1a2c;
+  --color-ink: #091120;
+  --color-navy-card: #16243a;
+  --color-emerald: #22b573;
+  --color-emerald-deep: #178a57;
+  --color-mint: #8fdcbd;
+  --color-slate: #5b6b82;
+  --color-slate-on-dark: #93a0b4;
+  --color-hairline: #ddd6c5;
+  --color-hairline-dark: #243450;
+  --color-error: #b3402e;
+
+  /* a11y amendment 1: focus ring is Deep Emerald on light surfaces */
+  --ring: var(--color-emerald-deep);
+}
+
+@theme inline {
+  --color-porcelain: var(--color-porcelain);
+  --color-navy: var(--color-navy);
+  --color-ink: var(--color-ink);
+  --color-navy-card: var(--color-navy-card);
+  --color-emerald: var(--color-emerald);
+  --color-emerald-deep: var(--color-emerald-deep);
+  --color-mint: var(--color-mint);
+  --color-slate: var(--color-slate);
+  --color-slate-on-dark: var(--color-slate-on-dark);
+  --color-hairline: var(--color-hairline);
+  --color-hairline-dark: var(--color-hairline-dark);
+  --color-error: var(--color-error);
+  --font-display: var(--font-eb-garamond);
+  --font-wordmark: var(--font-montserrat);
+  --font-sans: var(--font-inter);
+  --radius-card: 16px;
+  --radius-input: 8px;
+}
+
+html {
+  color-scheme: light;
+}
+
+body {
+  background: var(--color-porcelain);
+  color: var(--color-ink);
+}
+
+/* Dark structural sections flip the ring color (a11y amendment 1) */
+.surface-dark {
+  --ring: var(--color-mint);
+  background: var(--color-navy);
+  color: var(--color-porcelain);
+}
+
+*:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+/* Sticky header must never obscure a focus/anchor target (WCAG 2.4.11) */
+[id] {
+  scroll-margin-top: 5.5rem;
+}
+
+/* Skip link: visually hidden until keyboard focus */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 100;
+}
+
+.skip-link:focus {
+  left: 16px;
+  top: 16px;
+  background: var(--color-ink);
+  color: var(--color-porcelain);
+  padding: 12px 20px;
+  border-radius: 9999px;
+}
+
+.hide-scrollbar {
+  scrollbar-width: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Tabular figures wherever numbers align (prices, specs) */
+.tnum {
+  font-variant-numeric: tabular-nums;
+}
