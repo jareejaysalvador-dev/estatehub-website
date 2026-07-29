@@ -74,12 +74,19 @@ export function Header() {
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
 
-  // Close everything on navigation
-  useEffect(() => {
+  // Close everything on navigation. React's documented "adjust state during
+  // render" pattern instead of an effect: compare against a tracked previous
+  // pathname and call the setters directly in the render body. React reruns
+  // the component immediately with the updated state before committing to
+  // the DOM, so this never paints stale menu state - and it satisfies
+  // react-hooks/set-state-in-effect, since no setState runs inside an effect.
+  const [prevPathname, setPrevPathname] = useState(pathname);
+  if (pathname !== prevPathname) {
+    setPrevPathname(pathname);
     setMenuOpen(false);
     setServicesOpen(false);
     setSearchOpen(false);
-  }, [pathname]);
+  }
 
   // Services dropdown: outside click + Esc + arrow keys
   useEffect(() => {
