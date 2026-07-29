@@ -1,11 +1,21 @@
+import { Hero } from "@/components/home/Hero";
+import { StatementBand } from "@/components/home/StatementBand";
+import { ServicesBento } from "@/components/home/ServicesBento";
+import { FeaturedProperties } from "@/components/home/FeaturedProperties";
+import { OverseasBand } from "@/components/home/OverseasBand";
+import { WhyEstateHub } from "@/components/home/WhyEstateHub";
+import { ClosingCta } from "@/components/home/ClosingCta";
+
 export default function Home() {
   return (
-    <div className="mx-auto max-w-7xl px-6 py-24">
-      <h1 className="font-display text-4xl text-ink">Stage 0 shell</h1>
-      <p className="mt-4 max-w-prose text-slate">
-        Layout foundation check: header, search, footer, tokens, fonts.
-        Homepage sections arrive in stage 1.
-      </p>
-    </div>
+    <>
+      <Hero />
+      <StatementBand />
+      <ServicesBento />
+      <FeaturedProperties />
+      <OverseasBand />
+      <WhyEstateHub />
+      <ClosingCta />
+    </>
   );
 }
