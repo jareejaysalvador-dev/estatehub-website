@@ -1,5 +1,5 @@
 // ============================================================
-// SAMPLE DATA — replace with real inventory before launch.
+// SAMPLE DATA - replace with real inventory before launch.
 // Source of truth for real listings: the intake workbook at
 // estatehub_handoff/intake/launch-content-intake.xlsx (Listings tab).
 // Photo IDs are hand-verified picsum.photos placeholders (checked in a
@@ -52,7 +52,7 @@ export const LISTINGS: Listing[] = [
     baths: 3,
     floorAreaSqm: 210,
     lotAreaSqm: 320,
-    photoIds: ["28", "1040", "164"],
+    photoIds: ["28", "1029", "164"],
     blurb:
       "Ridge-side villa with cool-climate gardens and a wide deck facing the treeline. Quiet street, ten minutes from the Tagaytay rotunda.",
     neighborhood:

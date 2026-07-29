@@ -1,5 +1,5 @@
 // ============================================================
-// SAMPLE DATA — replace with the real roster before launch.
+// SAMPLE DATA - replace with the real roster before launch.
 // Source of truth: intake workbook (Broker Roster tab) at
 // estatehub_handoff/intake/launch-content-intake.xlsx.
 // Names and license numbers below are placeholders, not real people;

@@ -13,6 +13,7 @@ export function MessengerWidget() {
 
   return (
     <a
+      id="messenger"
       href={`https://m.me/${PAGE_ID}`}
       target="_blank"
       rel="noopener noreferrer"
