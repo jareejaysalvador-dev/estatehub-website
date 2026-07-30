@@ -30,6 +30,10 @@ export const metadata: Metadata = {
   },
   description:
     "Licensed brokers for buying, selling, leasing, and managing property across the Philippines. One point of contact from first call to closing.",
+  // PRE-LAUNCH: site-wide noindex while listings/broker roster are sample
+  // data (see estatehub_handoff/analysis/seo-plan.md, punch-list item 13).
+  // Remove this block once real inventory replaces the sample listings.
+  robots: { index: false, follow: false },
 };
 
 export default function RootLayout({
