@@ -14,6 +14,9 @@ const eslintConfig = defineConfig([
     "next-env.d.ts",
     // Reference-only archived first build, not part of the active app.
     "_archive-first-build/**",
+    // Sanity Studio: a separate sub-project with its own eslint.config.mjs,
+    // dependencies, and build output - not part of the Next.js app's lint.
+    "studio/**",
   ]),
 ]);
 
