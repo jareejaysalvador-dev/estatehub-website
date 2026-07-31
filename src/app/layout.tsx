@@ -3,6 +3,7 @@ import { EB_Garamond, Inter, Montserrat } from "next/font/google";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { MessengerWidget } from "@/components/MessengerWidget";
+import { FloatingContactButton } from "@/components/FloatingContactButton";
 import "./globals.css";
 
 const ebGaramond = EB_Garamond({
@@ -56,6 +57,7 @@ export default function RootLayout({
           {children}
         </main>
         <Footer />
+        <FloatingContactButton />
         <MessengerWidget />
       </body>
     </html>

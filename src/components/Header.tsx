@@ -23,13 +23,13 @@ function Wordmark({ compact = false }: { compact?: boolean }) {
         height={compact ? 30 : 32}
         priority
       />
-      {!compact && (
-        <span className="font-wordmark text-sm tracking-[0.18em] text-ink">
-          <span className="font-light">ESTATE</span>
-          <span className="font-bold">HUB</span>
-          <span className="font-semibold text-emerald-deep">.PH</span>
-        </span>
-      )}
+      <span
+        className={`font-wordmark text-ink ${compact ? "text-sm" : "text-sm tracking-[0.18em]"}`}
+      >
+        <span className="font-light">ESTATE</span>
+        <span className="font-bold">HUB</span>
+        <span className="font-semibold text-emerald-deep">.PH</span>
+      </span>
     </span>
   );
 }
@@ -177,7 +177,7 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-40 border-b border-hairline bg-porcelain/95 backdrop-blur-sm">
-      <div className="mx-auto flex h-16 max-w-7xl items-center gap-3 px-6 lg:gap-6">
+      <div className="mx-auto flex h-16 max-w-7xl items-center gap-3 px-4 sm:px-6 lg:gap-6">
         <Link href="/" aria-label="EstateHub.ph home" className="shrink-0">
           <span className="hidden md:block">
             <Wordmark />
@@ -253,9 +253,11 @@ export function Header() {
         <SearchForm id="header-search" className="hidden w-52 md:block lg:w-56" />
 
         <div className="flex flex-1 items-center justify-end gap-2 md:flex-none">
+          {/* Hidden below md: FloatingContactButton covers mobile instead,
+              freeing header width for the wordmark text (see Wordmark). */}
           <Link
             href="/contact"
-            className="rounded-full bg-emerald px-4 py-2 text-sm font-semibold text-ink transition-colors hover:bg-mint md:px-5 md:py-2.5"
+            className="hidden rounded-full bg-emerald px-4 py-2 text-sm font-semibold text-ink transition-colors hover:bg-mint md:block md:px-5 md:py-2.5"
           >
             Contact us
           </Link>
