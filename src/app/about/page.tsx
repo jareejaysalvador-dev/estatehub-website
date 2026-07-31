@@ -75,54 +75,104 @@ export default async function AboutPage() {
         ))}
       </div>
 
-      <Reveal delay={0.1} className="mt-14 lg:mt-20">
-        <h2 className="text-[22px] font-bold tracking-tight text-ink lg:text-[28px]">
-          Our brokers
-        </h2>
-        <p className="mt-2 max-w-xl text-sm text-slate">
-          Our roster is growing. Meet the broker confirmed so far, with
-          more to be added as they join the team.
-        </p>
-        <div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2">
-          {brokers.map((broker) => (
-            <div key={broker.id} className="rounded-2xl border border-hairline bg-white p-6">
-              <div className="flex items-center gap-4">
-                {broker.photo && (
+      {brokers.length > 0 && (
+        <Reveal delay={0.1} className="mt-14 lg:mt-20">
+          {brokers.length === 1 ? (
+            <>
+              <h2 className="text-[22px] font-bold tracking-tight text-ink lg:text-[28px]">
+                Meet your broker
+              </h2>
+              <p className="mt-2 max-w-xl text-sm text-slate">
+                Every EstateHub transaction is handled by one licensed
+                broker, start to finish. More brokers will join as our
+                roster grows; here is who you will be working with today.
+              </p>
+              <div className="mt-6 flex flex-col gap-6 rounded-2xl border border-hairline bg-white p-8 sm:flex-row sm:items-start sm:gap-8 sm:p-10">
+                {brokers[0].photo && (
                   <Image
-                    src={broker.photo.url}
-                    alt={broker.photo.alt}
-                    width={56}
-                    height={56}
-                    className="h-14 w-14 shrink-0 rounded-full object-cover"
+                    src={brokers[0].photo.url}
+                    alt={brokers[0].photo.alt}
+                    width={112}
+                    height={112}
+                    className="h-24 w-24 shrink-0 rounded-full object-cover sm:h-28 sm:w-28"
                   />
                 )}
                 <div>
-                  <h3 className="text-base font-semibold text-ink">{broker.name}</h3>
-                  <p className="mt-0.5 text-sm text-slate">{broker.prcLicense}</p>
+                  <h3 className="text-lg font-semibold text-ink">{brokers[0].name}</h3>
+                  <p className="mt-0.5 text-sm text-slate">{brokers[0].prcLicense}</p>
+                  <div className="mt-3 flex flex-col gap-1.5 text-sm text-slate sm:flex-row sm:flex-wrap sm:gap-x-5">
+                    <span className="flex items-center gap-1.5">
+                      <MapPinLine size={16} weight="light" aria-hidden="true" />
+                      <span className="sr-only">Serves: </span>
+                      {brokers[0].areas}
+                    </span>
+                    <span className="flex items-center gap-1.5">
+                      <Translate size={16} weight="light" aria-hidden="true" />
+                      <span className="sr-only">Speaks: </span>
+                      {brokers[0].languages}
+                    </span>
+                  </div>
+                  <p className="mt-3 max-w-xl text-sm text-ink/85">{brokers[0].bio}</p>
+                  {brokers[0].isSample && (
+                    <p className="mt-2 text-xs text-error">
+                      Placeholder entry, pending real roster intake.
+                    </p>
+                  )}
                 </div>
               </div>
-              <div className="mt-3 flex flex-col gap-1.5 text-sm text-slate">
-                <span className="flex items-center gap-1.5">
-                  <MapPinLine size={16} weight="light" aria-hidden="true" />
-                  <span className="sr-only">Serves: </span>
-                  {broker.areas}
-                </span>
-                <span className="flex items-center gap-1.5">
-                  <Translate size={16} weight="light" aria-hidden="true" />
-                  <span className="sr-only">Speaks: </span>
-                  {broker.languages}
-                </span>
+            </>
+          ) : (
+            <>
+              <h2 className="text-[22px] font-bold tracking-tight text-ink lg:text-[28px]">
+                Our brokers
+              </h2>
+              <p className="mt-2 max-w-xl text-sm text-slate">
+                Meet the licensed brokers on our team, each handling your
+                transaction from first conversation through closing.
+              </p>
+              <div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2">
+                {brokers.map((broker) => (
+                  <div key={broker.id} className="rounded-2xl border border-hairline bg-white p-6">
+                    <div className="flex items-center gap-4">
+                      {broker.photo && (
+                        <Image
+                          src={broker.photo.url}
+                          alt={broker.photo.alt}
+                          width={56}
+                          height={56}
+                          className="h-14 w-14 shrink-0 rounded-full object-cover"
+                        />
+                      )}
+                      <div>
+                        <h3 className="text-base font-semibold text-ink">{broker.name}</h3>
+                        <p className="mt-0.5 text-sm text-slate">{broker.prcLicense}</p>
+                      </div>
+                    </div>
+                    <div className="mt-3 flex flex-col gap-1.5 text-sm text-slate">
+                      <span className="flex items-center gap-1.5">
+                        <MapPinLine size={16} weight="light" aria-hidden="true" />
+                        <span className="sr-only">Serves: </span>
+                        {broker.areas}
+                      </span>
+                      <span className="flex items-center gap-1.5">
+                        <Translate size={16} weight="light" aria-hidden="true" />
+                        <span className="sr-only">Speaks: </span>
+                        {broker.languages}
+                      </span>
+                    </div>
+                    <p className="mt-3 text-sm text-ink/85">{broker.bio}</p>
+                    {broker.isSample && (
+                      <p className="mt-2 text-xs text-error">
+                        Placeholder entry, pending real roster intake.
+                      </p>
+                    )}
+                  </div>
+                ))}
               </div>
-              <p className="mt-3 text-sm text-ink/85">{broker.bio}</p>
-              {broker.isSample && (
-                <p className="mt-2 text-xs text-error">
-                  Placeholder entry, pending real roster intake.
-                </p>
-              )}
-            </div>
-          ))}
-        </div>
-      </Reveal>
+            </>
+          )}
+        </Reveal>
+      )}
 
       <Reveal delay={0.14} className="mt-14 lg:mt-20">
         <div className="flex flex-col items-start gap-6 rounded-2xl border border-hairline bg-white px-8 py-12 md:flex-row md:items-center md:justify-between lg:px-12">
