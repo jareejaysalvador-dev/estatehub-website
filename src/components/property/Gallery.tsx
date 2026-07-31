@@ -3,18 +3,20 @@
 import { useState } from "react";
 import Image from "next/image";
 import { ArrowLeft, ArrowRight } from "@phosphor-icons/react";
+import type { ResolvedImage } from "@/sanity/image";
 
 export function Gallery({
-  photoIds,
+  photos,
   title,
 }: {
-  photoIds: string[];
+  photos: ResolvedImage[];
   title: string;
 }) {
   const [index, setIndex] = useState(0);
+  const photo = photos[index];
 
   function go(delta: number) {
-    setIndex((i) => (i + delta + photoIds.length) % photoIds.length);
+    setIndex((i) => (i + delta + photos.length) % photos.length);
   }
 
   function onKeyDown(e: React.KeyboardEvent) {
@@ -30,16 +32,18 @@ export function Gallery({
       onKeyDown={onKeyDown}
       className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-navy-card lg:aspect-[16/10]"
     >
-      <Image
-        src={`https://picsum.photos/id/${photoIds[index]}/1200/900`}
-        alt={`${title}, photo ${index + 1} of ${photoIds.length}`}
-        fill
-        priority
-        sizes="(min-width: 1024px) 65vw, 100vw"
-        className="object-cover"
-      />
+      {photo && (
+        <Image
+          src={photo.url}
+          alt={photo.alt}
+          fill
+          priority
+          sizes="(min-width: 1024px) 65vw, 100vw"
+          className="object-cover"
+        />
+      )}
 
-      {photoIds.length > 1 && (
+      {photos.length > 1 && (
         <>
           <button
             type="button"
@@ -61,7 +65,7 @@ export function Gallery({
             className="tnum absolute bottom-3 right-3 rounded-full bg-ink/70 px-3 py-1 text-xs text-porcelain"
             aria-hidden="true"
           >
-            {index + 1} / {photoIds.length}
+            {index + 1} / {photos.length}
           </span>
         </>
       )}

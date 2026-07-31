@@ -1,22 +1,26 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowsOutSimple, Bathtub, Bed } from "@phosphor-icons/react/dist/ssr";
-import { formatPrice, type Listing } from "@/data/listings";
+import { formatPrice, type Listing } from "@/sanity/types";
 
 export function PropertyCard({ listing }: { listing: Listing }) {
+  const cover = listing.photos[0];
+
   return (
     <Link
       href={`/properties/${listing.slug}`}
       className="group block overflow-hidden rounded-2xl border border-hairline bg-white transition-all hover:-translate-y-0.5 hover:border-emerald hover:shadow-lg"
     >
       <div className="relative aspect-[4/3] overflow-hidden">
-        <Image
-          src={`https://picsum.photos/id/${listing.photoIds[0]}/700/525`}
-          alt={`${listing.title} exterior view`}
-          fill
-          sizes="(min-width: 1024px) 30vw, (min-width: 768px) 45vw, 90vw"
-          className="object-cover transition-transform duration-500 group-hover:scale-105"
-        />
+        {cover && (
+          <Image
+            src={cover.url}
+            alt={cover.alt}
+            fill
+            sizes="(min-width: 1024px) 30vw, (min-width: 768px) 45vw, 90vw"
+            className="object-cover transition-transform duration-500 group-hover:scale-105"
+          />
+        )}
         <span className="absolute left-3 top-3 rounded-full bg-ink/85 px-3 py-1 text-xs font-medium text-porcelain">
           {listing.status}
         </span>

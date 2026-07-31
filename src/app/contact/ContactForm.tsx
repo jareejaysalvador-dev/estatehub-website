@@ -1,7 +1,8 @@
 "use client";
 
-import { useSyncExternalStore } from "react";
-import { getListing } from "@/data/listings";
+import { useEffect, useState, useSyncExternalStore } from "react";
+import { getListing } from "@/sanity/queries";
+import type { Listing } from "@/sanity/types";
 import { ContactFormFields } from "./ContactFormFields";
 
 // Reads query params via window.location instead of next/navigation's
@@ -36,7 +37,27 @@ export function ContactForm() {
   const params = new URLSearchParams(search);
   const propertySlug = params.get("property") ?? "";
   const initialIntent = params.get("intent") ?? "";
-  const listing = propertySlug ? getListing(propertySlug) : undefined;
+
+  const [fetchedListing, setFetchedListing] = useState<Listing | undefined>(undefined);
+
+  // Sanity's client has no auth token (public read-only dataset), so this
+  // fetch is safe to run in the browser - it avoids both the useSearchParams
+  // Suspense hang (see subscribe/getSnapshot above) and turning /contact
+  // into a dynamic route (a server-side searchParams read would). Derived
+  // below (not cleared here) to avoid a sync setState-in-effect call for
+  // the no-slug case.
+  useEffect(() => {
+    if (!propertySlug) return;
+    let cancelled = false;
+    getListing(propertySlug).then((result) => {
+      if (!cancelled) setFetchedListing(result ?? undefined);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [propertySlug]);
+
+  const listing = propertySlug ? fetchedListing : undefined;
 
   // Force a fresh mount once the real client-side location is read (server
   // snapshot is always ""), so the intent radio group's `defaultChecked`

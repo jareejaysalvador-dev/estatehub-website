@@ -11,11 +11,12 @@ import {
 import { Gallery } from "@/components/property/Gallery";
 import { AgentBlock } from "@/components/property/AgentBlock";
 import { StickyInquireBar } from "@/components/property/StickyInquireBar";
-import { LISTINGS, getListing, formatPrice } from "@/data/listings";
-import { getBroker } from "@/data/brokers";
+import { getListing, getAllListingSlugs } from "@/sanity/queries";
+import { formatPrice } from "@/sanity/types";
 
-export function generateStaticParams() {
-  return LISTINGS.map((listing) => ({ slug: listing.slug }));
+export async function generateStaticParams() {
+  const slugs = await getAllListingSlugs();
+  return slugs.map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({
@@ -24,7 +25,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const listing = getListing(slug);
+  const listing = await getListing(slug);
   if (!listing) return {};
   return {
     title: listing.title,
@@ -38,10 +39,9 @@ export default async function PropertyDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const listing = getListing(slug);
+  const listing = await getListing(slug);
   if (!listing) notFound();
 
-  const broker = getBroker(listing.brokerId);
   const hasBeds = listing.beds !== null || listing.baths !== null;
   const area = listing.floorAreaSqm ?? listing.lotAreaSqm;
   const areaLabel = listing.floorAreaSqm !== null ? "floor area" : "lot area";
@@ -77,7 +77,7 @@ export default async function PropertyDetailPage({
 
       <div className="mt-4 grid grid-cols-1 gap-10 lg:mt-2 lg:grid-cols-[1fr_360px]">
         <div>
-          <Gallery photoIds={listing.photoIds} title={listing.title} />
+          <Gallery photos={listing.photos} title={listing.title} />
 
           <div className="mt-6">
             <span className="inline-block rounded-full bg-emerald/12 px-3 py-1 text-xs font-medium text-emerald-deep">
@@ -129,13 +129,11 @@ export default async function PropertyDetailPage({
         </div>
 
         <div className="lg:sticky lg:top-24 lg:h-fit">
-          {broker && (
-            <AgentBlock
-              broker={broker}
-              listingSlug={listing.slug}
-              listingTitle={listing.title}
-            />
-          )}
+          <AgentBlock
+            broker={listing.broker}
+            listingSlug={listing.slug}
+            listingTitle={listing.title}
+          />
         </div>
       </div>
 

@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { WarningCircle } from "@phosphor-icons/react";
-import type { Listing } from "@/data/listings";
+import type { Listing } from "@/sanity/types";
 
 const INTENTS = [
   { value: "buy", label: "Buying a property" },

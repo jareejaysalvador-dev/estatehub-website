@@ -1,10 +1,11 @@
 import Link from "next/link";
 import { Reveal } from "@/components/Reveal";
 import { PropertyCard } from "@/components/PropertyCard";
-import { LISTINGS } from "@/data/listings";
+import { getAllListings } from "@/sanity/queries";
 
-export function FeaturedProperties() {
-  const featured = LISTINGS.slice(0, 4);
+export async function FeaturedProperties() {
+  const listings = await getAllListings();
+  const featured = listings.slice(0, 4);
 
   return (
     <section className="overflow-x-hidden border-y border-hairline bg-white/40 py-16 lg:py-24">

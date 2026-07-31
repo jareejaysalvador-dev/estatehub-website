@@ -4,7 +4,7 @@ import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { MagnifyingGlass } from "@phosphor-icons/react";
 import { PropertyCard } from "@/components/PropertyCard";
-import { LISTINGS, type ListingStatus, type PropertyType } from "@/data/listings";
+import type { Listing, ListingStatus, PropertyType } from "@/sanity/types";
 
 const TYPES: PropertyType[] = ["House", "Condo", "Townhouse", "Lot", "Commercial"];
 const STATUSES: ListingStatus[] = ["For Sale", "For Lease"];
@@ -12,7 +12,7 @@ const STATUSES: ListingStatus[] = ["For Sale", "For Lease"];
 const SELECT_CLASSES =
   "w-full rounded-lg border border-slate/50 bg-white px-3 py-2.5 text-base text-ink focus:outline-none";
 
-export function PropertiesResults() {
+export function PropertiesResults({ listings }: { listings: Listing[] }) {
   const params = useSearchParams();
 
   // Allowlist validation: anything unrecognized is treated as unset.
@@ -24,7 +24,7 @@ export function PropertiesResults() {
     ? (rawStatus as ListingStatus)
     : "";
 
-  const results = LISTINGS.filter((listing) => {
+  const results = listings.filter((listing) => {
     if (type && listing.type !== type) return false;
     if (status && listing.status !== status) return false;
     if (query) {

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ChatCircleDots, Phone } from "@phosphor-icons/react/dist/ssr";
-import type { Broker } from "@/data/brokers";
+import type { Broker } from "@/sanity/types";
 
 export function AgentBlock({
   broker,
