@@ -1,6 +1,11 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import { IdentificationBadge, MapPinLine, UsersThree } from "@phosphor-icons/react/dist/ssr";
+import {
+  IdentificationBadge,
+  MapPinLine,
+  Translate,
+  UsersThree,
+} from "@phosphor-icons/react/dist/ssr";
 import { Reveal } from "@/components/Reveal";
 import { BROKERS } from "@/data/brokers";
 
@@ -80,8 +85,18 @@ export default function AboutPage() {
             <div key={broker.id} className="rounded-2xl border border-hairline bg-white p-6">
               <h3 className="text-base font-semibold text-ink">{broker.name}</h3>
               <p className="mt-1 text-sm text-slate">{broker.prcLicense}</p>
-              <p className="mt-1 text-sm text-slate">{broker.areas}</p>
-              <p className="mt-1 text-sm text-slate">{broker.languages}</p>
+              <div className="mt-3 flex flex-col gap-1.5 text-sm text-slate">
+                <span className="flex items-center gap-1.5">
+                  <MapPinLine size={16} weight="light" aria-hidden="true" />
+                  <span className="sr-only">Serves: </span>
+                  {broker.areas}
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <Translate size={16} weight="light" aria-hidden="true" />
+                  <span className="sr-only">Speaks: </span>
+                  {broker.languages}
+                </span>
+              </div>
               <p className="mt-3 text-sm text-ink/85">{broker.bio}</p>
               {broker.isSample && (
                 <p className="mt-2 text-xs text-error">
