@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
 import {
@@ -7,7 +8,7 @@ import {
   UsersThree,
 } from "@phosphor-icons/react/dist/ssr";
 import { Reveal } from "@/components/Reveal";
-import { BROKERS } from "@/data/brokers";
+import { getAllBrokers } from "@/sanity/queries";
 
 export const metadata: Metadata = {
   title: "About EstateHub",
@@ -36,7 +37,9 @@ const PRINCIPLES = [
   },
 ];
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const brokers = await getAllBrokers();
+
   return (
     <div className="mx-auto max-w-7xl px-6 py-12 lg:py-16">
       <Reveal>
@@ -81,10 +84,23 @@ export default function AboutPage() {
           more to be added as they join the team.
         </p>
         <div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2">
-          {BROKERS.map((broker) => (
+          {brokers.map((broker) => (
             <div key={broker.id} className="rounded-2xl border border-hairline bg-white p-6">
-              <h3 className="text-base font-semibold text-ink">{broker.name}</h3>
-              <p className="mt-1 text-sm text-slate">{broker.prcLicense}</p>
+              <div className="flex items-center gap-4">
+                {broker.photo && (
+                  <Image
+                    src={broker.photo.url}
+                    alt={broker.photo.alt}
+                    width={56}
+                    height={56}
+                    className="h-14 w-14 shrink-0 rounded-full object-cover"
+                  />
+                )}
+                <div>
+                  <h3 className="text-base font-semibold text-ink">{broker.name}</h3>
+                  <p className="mt-0.5 text-sm text-slate">{broker.prcLicense}</p>
+                </div>
+              </div>
               <div className="mt-3 flex flex-col gap-1.5 text-sm text-slate">
                 <span className="flex items-center gap-1.5">
                   <MapPinLine size={16} weight="light" aria-hidden="true" />

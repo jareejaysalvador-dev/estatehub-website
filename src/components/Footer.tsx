@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ShieldCheck } from "@phosphor-icons/react/dist/ssr";
+import { getSiteSettings } from "@/sanity/queries";
 
 const SERVICE_LINKS = [
   { label: "Sales", href: "/services/sales" },
@@ -16,7 +17,9 @@ const COMPANY_LINKS = [
   { label: "Contact us", href: "/contact" },
 ];
 
-export function Footer() {
+export async function Footer() {
+  const settings = await getSiteSettings();
+
   return (
     <footer className="surface-dark">
       <div className="mx-auto max-w-7xl px-6 py-14">
@@ -78,10 +81,10 @@ export function Footer() {
             <ul className="mt-4 flex flex-col gap-2.5 text-sm text-porcelain/80">
               <li>
                 <a
-                  href="mailto:hello@estatehub.ph"
+                  href={`mailto:${settings?.contactEmail ?? "hello@estatehub.ph"}`}
                   className="transition-colors hover:text-porcelain"
                 >
-                  hello@estatehub.ph
+                  {settings?.contactEmail ?? "hello@estatehub.ph"}
                 </a>
               </li>
               <li>Metro Manila, Philippines</li>
