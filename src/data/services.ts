@@ -10,10 +10,11 @@ export interface ServiceContent {
   showOverseasLink: boolean;
 }
 
-// Response to "what does it cost" questions deliberately stays generic:
-// exact commission/fee models are one of the open business questions in
-// estatehub_handoff/intake/launch-content-intake.xlsx (Policies tab) and
-// must not be invented here.
+// Fee/policy FAQ answers are sourced from
+// estatehub_handoff/intake/launch-content-intake.xlsx (Policies tab) as
+// they're confirmed. Sales' commission model is still an open question
+// there (left blank) - keep that one answer generic until it's answered;
+// don't invent it.
 export const SERVICES: Record<string, ServiceContent> = {
   sales: {
     slug: "sales",
@@ -94,8 +95,7 @@ export const SERVICES: Record<string, ServiceContent> = {
     faq: [
       {
         question: "Do tenants pay a fee to lease through EstateHub?",
-        answer:
-          "Our team will walk you through any applicable fees when you inquire, before you commit to anything.",
+        answer: "No. EstateHub does not charge tenants a fee to lease through us.",
       },
       {
         question: "How are tenants screened?",
@@ -135,7 +135,7 @@ export const SERVICES: Record<string, ServiceContent> = {
       {
         question: "What is included in the management fee?",
         answer:
-          "Scope and fees are set out in your management agreement before you sign anything, tailored to your property.",
+          "For short-term rentals, our fee is 20% of the monthly rent collected. For long-term leases (12-month contracts), it's a one-month rent equivalent. Full scope is set out in your management agreement before you sign anything.",
       },
       {
         question: "Can you manage my property if I live abroad?",

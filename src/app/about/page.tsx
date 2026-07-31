@@ -72,9 +72,8 @@ export default function AboutPage() {
           Our brokers
         </h2>
         <p className="mt-2 max-w-xl text-sm text-slate">
-          Full roster with PRC license numbers is being finalized. The
-          entries below are placeholders, not real people, pending our
-          content intake.
+          Our roster is growing. Meet the broker confirmed so far, with
+          more to be added as they join the team.
         </p>
         <div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2">
           {BROKERS.map((broker) => (
@@ -82,6 +81,8 @@ export default function AboutPage() {
               <h3 className="text-base font-semibold text-ink">{broker.name}</h3>
               <p className="mt-1 text-sm text-slate">{broker.prcLicense}</p>
               <p className="mt-1 text-sm text-slate">{broker.areas}</p>
+              <p className="mt-1 text-sm text-slate">{broker.languages}</p>
+              <p className="mt-3 text-sm text-ink/85">{broker.bio}</p>
               {broker.isSample && (
                 <p className="mt-2 text-xs text-error">
                   Placeholder entry, pending real roster intake.

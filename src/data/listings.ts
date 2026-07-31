@@ -57,7 +57,7 @@ export const LISTINGS: Listing[] = [
       "Ridge-side villa with cool-climate gardens and a wide deck facing the treeline. Quiet street, ten minutes from the Tagaytay rotunda.",
     neighborhood:
       "Tagaytay Ridge sits above the Taal caldera with year-round cool air, weekend markets, and an easy drive to Metro Manila via CALAX.",
-    brokerId: "sample-broker-1",
+    brokerId: "rosemarie-ramos",
   },
   {
     slug: "studio-condo-bgc",
@@ -75,7 +75,7 @@ export const LISTINGS: Listing[] = [
       "Efficient studio on a high floor, steps from High Street retail and the BGC bus loop. Strong rental history in the building.",
     neighborhood:
       "Bonifacio Global City is Metro Manila's walkable business district: offices, international schools, hospitals, and nightlife in one grid.",
-    brokerId: "sample-broker-2",
+    brokerId: "rosemarie-ramos",
   },
   {
     slug: "4br-house-alabang",
@@ -93,7 +93,7 @@ export const LISTINGS: Listing[] = [
       "Two-storey family home in a gated village with mature trees, a covered lanai, and a study that works as a fifth bedroom.",
     neighborhood:
       "Alabang pairs village quiet with town-center convenience: Festival Mall, Molito, top schools, and quick Skyway access north.",
-    brokerId: "sample-broker-1",
+    brokerId: "rosemarie-ramos",
   },
   {
     slug: "2br-rental-cebu-it-park",
@@ -111,7 +111,7 @@ export const LISTINGS: Listing[] = [
       "Corner two-bedroom with a workspace nook, walking distance to IT Park offices and the Ayala Central Bloc.",
     neighborhood:
       "Cebu IT Park runs around the clock: BPO towers, cafes, and co-working spaces, with the airport twenty minutes away.",
-    brokerId: "sample-broker-2",
+    brokerId: "rosemarie-ramos",
   },
   {
     slug: "commercial-lot-batangas",
@@ -129,7 +129,7 @@ export const LISTINGS: Listing[] = [
       "Corner commercial lot on the diversion road with frontage on two sides, near the port access route.",
     neighborhood:
       "Batangas City anchors the province's port economy; the diversion road corridor is its fastest-growing commercial strip.",
-    brokerId: "sample-broker-1",
+    brokerId: "rosemarie-ramos",
   },
   {
     slug: "office-floor-makati",
@@ -147,7 +147,7 @@ export const LISTINGS: Listing[] = [
       "Fitted whole floor in a Grade B tower off Ayala Avenue: reception, two boardrooms, and server room in place.",
     neighborhood:
       "Makati remains the country's financial core, with the deepest pool of corporate tenants and after-hours dining on every block.",
-    brokerId: "sample-broker-2",
+    brokerId: "rosemarie-ramos",
   },
 ];
 

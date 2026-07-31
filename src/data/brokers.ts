@@ -1,9 +1,8 @@
 // ============================================================
-// SAMPLE DATA - replace with the real roster before launch.
-// Source of truth: intake workbook (Broker Roster tab) at
-// estatehub_handoff/intake/launch-content-intake.xlsx.
-// Names and license numbers below are placeholders, not real people;
-// the About page renders roster slots as pending until this is filled.
+// Real roster, from intake (Broker Roster tab) at
+// estatehub_handoff/intake/launch-content-intake.xlsx. Partial: one
+// broker confirmed so far. isSample stays a real field (not removed)
+// so any future stand-in entry is still labeled, not silently real.
 // ============================================================
 
 export interface Broker {
@@ -14,27 +13,22 @@ export interface Broker {
   phone: string;
   email: string;
   areas: string;
-  isSample: true;
+  languages: string;
+  bio: string;
+  isSample: boolean;
 }
 
 export const BROKERS: Broker[] = [
   {
-    id: "sample-broker-1",
-    name: "Sample Broker A",
-    prcLicense: "PRC No. pending intake",
-    phone: "+63 900 000 0000",
-    email: "hello@estatehub.ph",
+    id: "rosemarie-ramos",
+    name: "Rosemarie A. Ramos",
+    prcLicense: "PRC No. 0034576",
+    phone: "+63 991 797 4412",
+    email: "estatehub.ph@gmail.com",
     areas: "South Luzon",
-    isSample: true,
-  },
-  {
-    id: "sample-broker-2",
-    name: "Sample Broker B",
-    prcLicense: "PRC No. pending intake",
-    phone: "+63 900 000 0000",
-    email: "hello@estatehub.ph",
-    areas: "Metro Manila and Cebu",
-    isSample: true,
+    languages: "English, Filipino",
+    bio: "Helping families plan their estate for generational wealth.",
+    isSample: false,
   },
 ];
 
