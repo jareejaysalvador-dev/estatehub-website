@@ -26,16 +26,34 @@ export async function FeaturedProperties() {
       </div>
 
       <Reveal delay={0.08} className="mt-8">
-        <ul className="hide-scrollbar mx-auto flex max-w-7xl snap-x snap-mandatory gap-5 overflow-x-auto px-6 pb-2">
-          {featured.map((listing) => (
-            <li
-              key={listing.slug}
-              className="w-[280px] shrink-0 snap-start sm:w-[320px]"
-            >
-              <PropertyCard listing={listing} />
-            </li>
-          ))}
-        </ul>
+        {featured.length > 0 ? (
+          <ul className="hide-scrollbar mx-auto flex max-w-7xl snap-x snap-mandatory gap-5 overflow-x-auto px-6 pb-2">
+            {featured.map((listing) => (
+              <li
+                key={listing.slug}
+                className="w-[280px] shrink-0 snap-start sm:w-[320px]"
+              >
+                <PropertyCard listing={listing} />
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <div className="mx-auto max-w-7xl px-6">
+            <div className="rounded-2xl border border-hairline bg-white px-8 py-10 text-center">
+              <p className="text-base text-slate">
+                New listings are on the way. Our brokers often know of
+                properties before they reach the site. Tell us what you are
+                looking for.
+              </p>
+              <Link
+                href="/contact"
+                className="mt-4 inline-block rounded-full bg-emerald px-6 py-3 text-sm font-semibold text-ink transition-colors hover:bg-mint"
+              >
+                Contact us
+              </Link>
+            </div>
+          </div>
+        )}
       </Reveal>
     </section>
   );
