@@ -1,5 +1,6 @@
 "use client";
 
+import { useMemo } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { MagnifyingGlass } from "@phosphor-icons/react";
@@ -9,11 +10,30 @@ import type { Listing, ListingStatus, PropertyType } from "@/sanity/types";
 const TYPES: PropertyType[] = ["House", "Condo", "Townhouse", "Lot", "Commercial"];
 const STATUSES: ListingStatus[] = ["For Sale", "For Lease"];
 
+// A location filter with fewer than 2 options is a dead control (its states
+// produce the same result set), so both the <select> and the URL param are
+// gated on this - same 0/1/many discipline as the broker roster.
+const MIN_LOCATIONS_FOR_FILTER = 2;
+
 const SELECT_CLASSES =
   "w-full rounded-lg border border-slate/50 bg-white px-3 py-2.5 text-base text-ink focus:outline-none";
 
 export function PropertiesResults({ listings }: { listings: Listing[] }) {
   const params = useSearchParams();
+
+  // Distinct locations from real listing data, deduped case/whitespace-
+  // insensitively (first-seen casing wins), alphabetical.
+  const locationOptions = useMemo(() => {
+    const seen = new Map<string, string>(); // lowercase key -> display label
+    for (const listing of listings) {
+      const label = (listing.location ?? "").trim();
+      if (!label) continue;
+      const key = label.toLowerCase();
+      if (!seen.has(key)) seen.set(key, label);
+    }
+    return [...seen.values()].sort((a, b) => a.localeCompare(b));
+  }, [listings]);
+  const showLocationFilter = locationOptions.length >= MIN_LOCATIONS_FOR_FILTER;
 
   // Allowlist validation: anything unrecognized is treated as unset.
   const query = (params.get("query") ?? "").slice(0, 80).trim();
@@ -23,10 +43,16 @@ export function PropertiesResults({ listings }: { listings: Listing[] }) {
   const status = STATUSES.includes(rawStatus as ListingStatus)
     ? (rawStatus as ListingStatus)
     : "";
+  const rawLocation = (params.get("location") ?? "").trim();
+  const location = showLocationFilter
+    ? (locationOptions.find((l) => l.toLowerCase() === rawLocation.toLowerCase()) ?? "")
+    : "";
 
   const results = listings.filter((listing) => {
     if (type && listing.type !== type) return false;
     if (status && listing.status !== status) return false;
+    if (location && (listing.location ?? "").trim().toLowerCase() !== location.toLowerCase())
+      return false;
     if (query) {
       const haystack =
         `${listing.title} ${listing.location} ${listing.type}`.toLowerCase();
@@ -35,14 +61,18 @@ export function PropertiesResults({ listings }: { listings: Listing[] }) {
     return true;
   });
 
-  const hasFilters = Boolean(query || type || status);
+  const hasFilters = Boolean(query || type || status || location);
 
   return (
     <>
       <form
         action="/properties"
         method="GET"
-        className="grid grid-cols-1 gap-3 rounded-2xl border border-hairline bg-white p-4 sm:grid-cols-2 lg:grid-cols-[1.5fr_1fr_1fr_auto]"
+        className={`grid grid-cols-1 gap-3 rounded-2xl border border-hairline bg-white p-4 sm:grid-cols-2 ${
+          showLocationFilter
+            ? "lg:grid-cols-[1.5fr_1fr_1fr_1fr_auto]"
+            : "lg:grid-cols-[1.5fr_1fr_1fr_auto]"
+        }`}
       >
         <div>
           <label htmlFor="filter-query" className="mb-1 block text-xs font-medium text-slate">
@@ -57,6 +87,26 @@ export function PropertiesResults({ listings }: { listings: Listing[] }) {
             className="w-full rounded-lg border border-slate/50 bg-white px-3 py-2.5 text-base text-ink placeholder:text-slate focus:outline-none"
           />
         </div>
+        {showLocationFilter && (
+          <div>
+            <label htmlFor="filter-location" className="mb-1 block text-xs font-medium text-slate">
+              Location
+            </label>
+            <select
+              id="filter-location"
+              name="location"
+              defaultValue={location}
+              className={SELECT_CLASSES}
+            >
+              <option value="">Any location</option>
+              {locationOptions.map((l) => (
+                <option key={l} value={l}>
+                  {l}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
         <div>
           <label htmlFor="filter-type" className="mb-1 block text-xs font-medium text-slate">
             Property type

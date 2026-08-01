@@ -44,7 +44,8 @@ export const listing = defineType({
       name: 'location',
       title: 'Location',
       type: 'string',
-      description: 'e.g. "Tagaytay, Cavite"',
+      description:
+        'Shown on the listing and used to group listings in the Location filter on the site. Enter it the same way every time - e.g. always "Tagaytay, Cavite", never sometimes "Tagaytay" or "Tagaytay City" for the same place.',
       validation: (rule) => rule.required(),
     }),
     defineField({
