@@ -27,13 +27,13 @@ export function OverseasBand() {
           </Link>
         </Reveal>
 
-        <Reveal delay={0.08}>
-          <ol className="flex flex-col">
-            {STEPS.map((step, i) => (
-              <li
-                key={step}
-                className={`flex gap-4 py-4 ${i === 0 ? "" : "border-t border-hairline-dark"}`}
-              >
+        <ol className="flex flex-col">
+          {STEPS.map((step, i) => (
+            <li
+              key={step}
+              className={i === 0 ? "" : "border-t border-hairline-dark"}
+            >
+              <Reveal delay={0.08 + i * 0.1} className="flex gap-4 py-4">
                 <span
                   aria-hidden="true"
                   className="tnum flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-emerald/15 text-sm font-semibold text-mint"
@@ -41,10 +41,10 @@ export function OverseasBand() {
                   {i + 1}
                 </span>
                 <p className="text-base text-porcelain/90">{step}</p>
-              </li>
-            ))}
-          </ol>
-        </Reveal>
+              </Reveal>
+            </li>
+          ))}
+        </ol>
       </div>
     </section>
   );
