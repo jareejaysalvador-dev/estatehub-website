@@ -21,8 +21,8 @@ export function Hero() {
           sizes="100vw"
           className="object-cover object-[70%_center]"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-navy via-navy/70 to-navy/15" />
-        <div className="absolute inset-0 bg-navy/15 lg:bg-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-r from-navy/85 via-navy/45 to-navy/8" />
+        <div className="absolute inset-0 bg-navy/8 lg:bg-transparent" />
       </div>
 
       <div className="relative mx-auto max-w-7xl px-6 py-20 lg:py-28">
