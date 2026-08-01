@@ -8,16 +8,21 @@ export function Hero() {
   return (
     <section className="surface-dark relative overflow-hidden">
       <div className="absolute inset-0">
+        {/* Placeholder stopgap, not commissioned photography: previously a
+            Chicago skyline (wrong country for a Philippine brokerage's
+            hero). Replaced with a verified real location - Makati City,
+            Philippines, sunset - by Mark Joseph Sesaldo on Unsplash
+            (https://unsplash.com/photos/LEi2famDMrM), free license. */}
         <Image
-          src="https://picsum.photos/id/1067/1920/1080"
+          src="https://images.unsplash.com/photo-1706974554042-4ee3d52b5d4a?w=1920&h=1080&fit=crop&q=80"
           alt=""
           fill
           priority
           sizes="100vw"
           className="object-cover object-[70%_center]"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-navy via-navy/90 to-navy/35" />
-        <div className="absolute inset-0 bg-navy/35 lg:bg-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-r from-navy via-navy/70 to-navy/15" />
+        <div className="absolute inset-0 bg-navy/15 lg:bg-transparent" />
       </div>
 
       <div className="relative mx-auto max-w-7xl px-6 py-20 lg:py-28">
