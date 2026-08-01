@@ -10,11 +10,11 @@ export function Hero() {
       <div className="absolute inset-0">
         {/* Placeholder stopgap, not commissioned photography: previously a
             Chicago skyline (wrong country for a Philippine brokerage's
-            hero). Replaced with a verified real location - Makati City,
-            Philippines, sunset - by Mark Joseph Sesaldo on Unsplash
-            (https://unsplash.com/photos/LEi2famDMrM), free license. */}
+            hero). Replaced with a verified real location - Bonifacio
+            Global City, Taguig, Philippines - by OJ Serrano on Unsplash
+            (https://unsplash.com/photos/iacKpANQHNA), free license. */}
         <Image
-          src="https://images.unsplash.com/photo-1706974554042-4ee3d52b5d4a?w=1920&h=1080&fit=crop&q=80"
+          src="https://images.unsplash.com/photo-1596564309076-01c1868b07a4?w=1920&h=1080&fit=crop&q=80"
           alt=""
           fill
           priority
