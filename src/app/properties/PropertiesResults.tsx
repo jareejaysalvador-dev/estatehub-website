@@ -110,7 +110,7 @@ export function PropertiesResults({ listings }: { listings: Listing[] }) {
       ) : (
         <div className="mt-8 rounded-2xl border border-hairline bg-white px-8 py-12 text-center">
           <h2 className="text-lg font-semibold text-ink">
-            No properties match these filters
+            {hasFilters ? "No properties match these filters" : "New listings are on the way"}
           </h2>
           <p className="mx-auto mt-2 max-w-md text-base text-slate">
             Our brokers often know of properties before they reach the site.
@@ -123,12 +123,14 @@ export function PropertiesResults({ listings }: { listings: Listing[] }) {
             >
               Contact us
             </Link>
-            <Link
-              href="/properties"
-              className="text-sm font-medium text-emerald-deep underline underline-offset-4 hover:text-ink"
-            >
-              Clear filters
-            </Link>
+            {hasFilters && (
+              <Link
+                href="/properties"
+                className="text-sm font-medium text-emerald-deep underline underline-offset-4 hover:text-ink"
+              >
+                Clear filters
+              </Link>
+            )}
           </div>
         </div>
       )}

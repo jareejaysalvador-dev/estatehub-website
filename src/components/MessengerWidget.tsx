@@ -1,20 +1,19 @@
-"use client";
+import { ChatCircleDots } from "@phosphor-icons/react/dist/ssr";
+import { getSiteSettings } from "@/sanity/queries";
 
-import { ChatCircleDots } from "@phosphor-icons/react";
-
-// Renders nothing until a real Facebook page ID exists (security spec: no
-// fake bubble, no third-party script loaded for an unconfigured channel).
-// When configured, this links out to m.me rather than embedding the FB SDK,
-// keeping the page free of a render-blocking third-party script.
-const PAGE_ID = process.env.NEXT_PUBLIC_FB_PAGE_ID;
-
-export function MessengerWidget() {
-  if (!PAGE_ID) return null;
+// Renders nothing until a real Facebook Page ID is entered in Sanity's Site
+// Settings (security spec: no fake bubble, no third-party script loaded for
+// an unconfigured channel). Links out to m.me rather than embedding the FB
+// SDK, keeping the page free of a render-blocking third-party script.
+export async function MessengerWidget() {
+  const settings = await getSiteSettings();
+  const pageId = settings?.facebookPageId;
+  if (!pageId) return null;
 
   return (
     <a
       id="messenger"
-      href={`https://m.me/${PAGE_ID}`}
+      href={`https://m.me/${pageId}`}
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Chat with us on Messenger"
