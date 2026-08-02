@@ -158,7 +158,7 @@ Ylopo's own launch press release quotes a broker's five-day result: approximatel
 |---|---|---|
 | Email drip | Universal | Moderate — weaker channel than US |
 | SMS | Universal (US carriers, A2P 10DLC friction) | Moderate — no 10DLC, but consent rules apply |
-| **Facebook Messenger** | **GoHighLevel only** | **Critical — reaches 90.6% of Filipino internet users** |
+| **Facebook Messenger** | **GoHighLevel only** | **Critical — 65.8M ad reach, 67.1% of PH internet users** |
 | WhatsApp | GoHighLevel native; others via Zapier | Moderate |
 | Viber | None found | Relevant — Homeward.ph uses it as primary handoff |
 | Instagram DM | GoHighLevel | Moderate |
@@ -220,7 +220,7 @@ Meanwhile the consularized SPA process is genuinely difficult: in-person embassy
 
 **One counterintuitive finding worth internalizing:** an Unbounce experiment cut a form from 9 fields to 6 and **conversions dropped 14%**; restoring 9 fields with clearer labels and marked optionals produced **+19%**. Clarity beats field count. Do not blindly shorten the contact form.
 
-**And the number that frames the entire funnel:** NAR reports 52% of buyers found their home online and 70% used mobile — **yet 88% still transacted through an agent.** Combined with Messenger reaching 90.6% of Filipino internet users and 97.8% accessing via smartphone, the funnel that fits is *mobile content → Messenger conversation → one broker*. Not a self-serve portal.
+**And the number that frames the entire funnel:** NAR reports 52% of buyers found their home online and 70% used mobile — **yet 88% still transacted through an agent.** Combined with Messenger's 65.8M reach in the Philippines and 97.8% of internet users accessing via smartphone, the funnel that fits is *mobile content → Messenger conversation → one broker*. Not a self-serve portal.
 
 ---
 
@@ -310,13 +310,66 @@ EstateHub.ph is registered as a **One Person Corporation (OPC)** under the Revis
 
 Three defensible pillars:
 
-**1. Channel fit.** Messenger-native rather than Messenger-bolted-on, in a market where Messenger reaches 90.6% of internet users. Every incumbent is SMS/Twilio-bound and geographically locked to US/Canada.
+**1. Channel fit.** Messenger-native rather than Messenger-bolted-on, in a market where Messenger's ad reach is **65.8 million people, 67.1% of internet users** (DataReportal, *Digital 2026: Philippines*), and Facebook itself reaches 95.8 million. Every incumbent is SMS/Twilio-bound and geographically locked to US/Canada. As the telephony verification below establishes, this is not merely a preference — SMS marketing to Philippine consumers is effectively closed as a channel, which makes Messenger the only viable scale channel rather than the best one.
 
 **2. The remote-transaction workflow.** POA sequencing, country-segmented document guidance, timezone-native scheduling. Verified gap, hard to copy, and it compounds trust rather than commoditizing.
 
 **3. Outcome instrumentation from lead #1.** No incumbent's customer has clean labeled outcome data. Twelve months of disciplined logging produces the exact asset that makes predictive scoring possible later — and it is the only pillar that gets stronger with time.
 
 **What EstateHub must not claim:** smarter AI than the incumbents. That claim is unfalsifiable, undifferentiated, and — per NAR's 46% — not believed by the market anyway.
+
+---
+
+## Channel verification: what actually works from the Philippines
+
+Verified against Twilio's per-country regulatory and SMS guidelines, AWS sender-ID documentation, Meta's platform policies, NTC memoranda, and GoHighLevel's own help centre.
+
+| Channel | Works? | Friction | Cost |
+|---|---|---|---|
+| **Facebook Messenger** | **Yes, immediately** | FB Page + Business Manager admin. 24-hour window applies | Included in plan |
+| **Instagram DM + comment auto-reply** | **Yes, immediately** | Same | Included |
+| **Email** | **Yes** | SPF/DKIM/DMARC, 7-day warm-up ramp | $0.675 / 1,000 |
+| **WhatsApp** | **Yes, moderate setup** | Meta Business Account + WABA | $10/mo + Meta per-message; **inbound service conversations free** |
+| **PH phone number (voice)** | Possible, with paperwork | DTI/SEC certificate + **Mayor's permit** + regional address | $15/mo local; $0.21–0.29/min |
+| **SMS marketing to PH** | **Effectively closed** | See below | $0.241/msg (~25× local gateways) |
+
+### SMS to Philippine consumers is closed, not merely expensive
+
+This is the decisive operational finding, and four independent obstacles stack on top of each other:
+
+1. **Mandatory sender-ID pre-registration since 7 April 2025.** Twilio: *"messages with unregistered Sender IDs will be blocked."* Registration takes roughly two weeks and requires letters of authorization to **both Globe and Smart**.
+2. **Promotional content is disallowed outright.** AWS's Philippines sender-ID registration requires the registrant to acknowledge that *"promotional content is disallowed for Philippines sender IDs"* — permitted categories are OTPs, delivery notifications, public service announcements, polling, and info-on-demand. Property marketing fits none of them.
+3. **Twilio names real estate specifically as spam.** Under its Philippine content-compliance rules: *"Spam messages are those which promote or offer financial loans, real estate, products and services."*
+4. **URLs are banned.** Twilio prohibits shortened URLs and bars links on domestic long-code sender IDs, and the NTC's September 2023 amendment directs telcos to block messages containing clickable domains, URLs, shorteners, and QR codes. **You cannot send a listing link** — which removes the single most useful payload a property SMS could carry.
+
+Layered on top: NTC MC 03-03-2005 requires prior opt-in, an opt-out method, company-name identification, and prohibits broadcast messaging between **9:00 PM and 7:00 AM**. Note that RA 11934 (the SIM Registration Act) is *not* the relevant instrument here — it governs subscriber identity, and contains no A2P provisions.
+
+**And SMS to OFWs is harder still.** The UAE blocks unregistered sender IDs, doesn't support long codes, requires an "AD-" prefix on promotional IDs, bans URLs and phone numbers in the message body, and enforces 9 PM–7 AM quiet hours. Saudi Arabia is comparable. Dubai and Riyadh are *more* restrictive SMS markets than Manila.
+
+**Conclusion: budget SMS at zero.** If transactional SMS later becomes genuinely necessary — a viewing reminder, not marketing — use a local Philippine gateway (Semaphore, PhilSMS) at roughly ₱0.50 per message via webhook, rather than routing through GHL's Twilio path at 20–25× the cost.
+
+### The 90-day cost model for renting GoHighLevel
+
+Assumptions, deliberately conservative: 5 leads in month one, 15 in month two, 30 in month three; roughly 70% Messenger, 20% WhatsApp, 10% email; one broker, one sub-account, **no SMS**.
+
+| Scenario | 90-day total | Monthly run rate |
+|---|---|---|
+| **Lean** — Messenger + email, self-setup, annual billing | **~$244** | ~$81 |
+| **Expected** — + WhatsApp, a paid snapshot, monthly billing | **~$427** | ~$110 |
+| **Careless** — + AI Employee, setup help, SMS experiments | **~$1,522** | ~$254 |
+
+**Starter at $97/month is sufficient, unambiguously.** Every difference between Starter and Unlimited is an *agency* capability — sub-account count, white-labelling, rebilling, SaaS Mode. Contacts, workflows, pipelines, calendars, and the unified inbox are identical. The only Starter limit with future relevance is location-level-only API access, which matters solely if the licensing ambition becomes real.
+
+**Two budget hazards, both avoidable:** AI Employee at $50–97/month *per sub-account* would double the platform cost and is the documented cause of the $5,000–10,000/month agency horror stories — leave it off. And the wallet auto-recharges the card on a threshold, so set the recharge amount low and check it weekly.
+
+**Exit terms:** no cancellation fee, no notice period. Contacts export to CSV; notes truncate to the latest note's first 255 characters; conversation history has no one-click export. Data is retained 90 days post-cancellation, then purged. **Automation logic, funnels, and conversation history are not portable** — which argues for keeping an independent durable record of leads and outcomes rather than treating GHL as the only copy.
+
+### Two things to verify before paying
+
+1. **Does the Philippines appear in GHL's phone-number country dropdown?** GHL publishes no supported-country list and never names the Philippines in any reachable document. An unanswered feature request on their own ideas board ("Send SMS in the Philippines directly from GoHighLevel," March 2026) suggests it is not natively supported. Test this in the 14-day trial.
+2. **Is Messenger genuinely free of per-message charges?** This is *inferred* — GHL's pricing guide itemizes every metered service and Messenger is absent — but no document states it outright. Since Messenger is ~70% of assumed volume, confirm with support before committing.
+
+One further caveat worth holding: GoHighLevel demonstrably sells to Philippine users (their Terms of Service exclude only embargoed jurisdictions, billing is USD, and they are running a HighLevel LIVE event in Manila in August 2026) — but essentially all identifiable Philippine GHL activity is the offshore-VA pattern, Filipinos operating GHL *on behalf of foreign agencies*. **No named Philippine business was found using it for its own Philippine customers.** That does not make it unworkable; it does mean EstateHub would be an early case rather than following a proven local path.
 
 ---
 
@@ -373,7 +426,7 @@ The OPC structure supports either fork without modification: it can own the IP a
 
 16. Property "viewing list" (Hoppler's cart pattern) — batch inquiry, one conversation.
 17. Teaser calculators with human follow-up (Ylopo mechanic), not self-serve answers.
-18. Email/SMS long-tail nurture with documented consent (**not** Messenger — the 24-hour window forbids it).
+18. Email long-tail nurture with documented consent (**not** Messenger — the 24-hour window forbids it; and **not** SMS — see the channel verification above).
 19. Simple reporting: leads by source, stage conversion rates, response times.
 20. Neighborhood guides with Facebook-group distribution — the quiz case study shows distribution, not the tool, produced the lift.
 
