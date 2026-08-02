@@ -444,6 +444,69 @@ The OPC structure supports either fork without modification: it can own the IP a
 
 ---
 
+## GHL 14-day trial: concrete setup plan
+
+This operationalizes MUST-HAVE roadmap items 1–9 inside the trial account, in the order that matters. Signing up and entering any trial/payment details is not something to delegate — that step is yours to do.
+
+### Before signing up
+
+Business timezone **Asia/Manila**, industry **Real Estate** if prompted. Use a real business email you'll actually monitor — this becomes the account owner.
+
+### 1. Pipeline — one, not six
+
+Despite six distinct intents (buy/rent/sell/manage/business/overseas), build **one pipeline**, not one per intent. At 5→15→30 leads/month with one broker, six parallel pipelines is complexity this brokerage doesn't have the volume to justify — filter by the Intent field instead (below). Revisit only if a specific intent's volume alone justifies its own view.
+
+Stages (roadmap item 5): **New → Contacted → Qualified → Viewing → Reserved → Closed Won → Closed Lost**, with a required "Lost Reason" field that only appears on the Lost stage.
+
+### 2. Custom fields — mapped to what the site already sends
+
+`src/app/api/inquiry/route.ts` already forwards a specific JSON shape to whatever `INQUIRY_WEBHOOK_URL` points at. Create matching custom fields so nothing gets silently dropped on arrival:
+
+| GHL custom field | Type | Source |
+|---|---|---|
+| Intent | Dropdown: buy/rent/sell/manage/business/overseas | `intent` |
+| Preferred Channel | Dropdown: email/phone/messenger | `preferredChannel` |
+| Preferred Time | Text | `preferredTime` |
+| Property Reference | Text | `property` (listing slug) |
+| Inquiry Message | Long text | `message` |
+
+**Gap found while building this: source attribution isn't captured at all yet.** Roadmap item 2 calls for UTM parameters, referrer, and landing page on every lead — but the current inquiry payload has none of these fields. GHL can't map fields the site never sends. This needs a small code change alongside the GHL setup (see "Paired code changes" below) — flagging it now rather than silently building around the gap.
+
+### 3. The inbound webhook workflow — the centerpiece
+
+Trigger: **Inbound Webhook** (GHL generates the URL — this becomes your `INQUIRY_WEBHOOK_URL`).
+
+1. **Create/Update Contact** — map the fields above; dedupe on email.
+2. **Create Opportunity** in the pipeline, stage `New`, Intent field set from the payload.
+3. **Instant acknowledgment** (roadmap item 3, sub-5-minute target) — email, since a web-form submission has no existing Messenger conversation thread to reply into. Set explicit expectations in the copy: who you are, when a human responds.
+4. **Notify the broker** (roadmap item 4) on a channel she actually monitors. This is genuinely unresolved — open question 2 in this report ("which channels are genuinely staffed, and during which hours?") has to be answered before this step means anything. Don't guess; ask Rosemarie what she'll actually see in real time.
+
+### 4. Channel connections
+
+- **Messenger**: connect the Facebook Page + Business Manager already referenced by `siteSettings.facebookPageId`.
+- **WhatsApp**: Meta Business Account + WABA — moderate setup, per the channel table above.
+- **Email**: SPF/DKIM/DMARC, plus GHL's own warm-up period before real volume.
+- **Skip entirely**: SMS (per the channel verification above) and the AI Employee add-on — the documented cause of runaway agency costs. Leave it off for the trial and well beyond.
+
+### 5. Verify before paying
+
+- [ ] Philippines appears in GHL's own phone-number country dropdown
+- [ ] Messenger is confirmed free of per-message charges (a support ticket, not an inference)
+
+### 6. Paired code changes this plan depends on — not GHL configuration
+
+Two roadmap items this trial can't actually deliver without a small change on the website side first:
+
+- **UTM/referrer/landing-page capture** (roadmap item 2) — add to the inquiry form and forward through `route.ts`'s payload. Without it, "source attribution" stays aspirational no matter what GHL does with the data it receives.
+- **Context-aware Messenger deep links** (roadmap item 7) — verified in the code: every "Message us on Messenger" entry point site-wide (`StickyInquireBar`, `AgentBlock`, the contact page, `ContactFormFields`) currently points at the same single generic `https://m.me/{pageId}` link with no property context. `m.me` supports a `?ref=` parameter built for exactly this; none of the four entry points use it today.
+- **`INQUIRY_WEBHOOK_URL` in Vercel** — set once the real webhook URL exists. Zero other code changes needed, per `route.ts`'s existing design.
+
+### 7. Explicitly not touched in the trial
+
+Everything in the WON'T HAVE table above — predictive scoring, AI voice, valuation tool, 3D tours, multi-tenant, paid lead packages, anything MLS/IDX. None of it works with the data this brokerage has today.
+
+---
+
 ## What to measure from day one
 
 Because the instrumentation *is* the strategy:
