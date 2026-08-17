@@ -13,7 +13,7 @@ const INTENTS = [
   { value: "overseas", label: "Buying or owning from abroad" },
 ] as const;
 
-type SubmitState = "idle" | "sending" | "delivered" | "undelivered" | "error";
+type SubmitState = "idle" | "sending" | "success" | "error";
 
 export function ContactFormFields({
   initialIntent,
@@ -46,12 +46,12 @@ export function ContactFormFields({
 
     const payload = {
       intent: String(data.get("intent") ?? ""),
-      name: String(data.get("name") ?? "").trim(),
+      firstName: String(data.get("firstName") ?? "").trim(),
+      lastName: String(data.get("lastName") ?? "").trim(),
       email: String(data.get("email") ?? "").trim(),
       phone: String(data.get("phone") ?? "").trim(),
-      preferredChannel: String(data.get("preferredChannel") ?? ""),
-      preferredTime: String(data.get("preferredTime") ?? "").trim(),
       message: String(data.get("message") ?? "").trim(),
+      listingTitle: listing?.title ?? "",
       property: propertySlug,
       company: String(data.get("company") ?? ""),
       startedAt,
@@ -59,7 +59,9 @@ export function ContactFormFields({
 
     const fieldErrors: Record<string, string> = {};
     if (!payload.intent) fieldErrors.intent = "Choose what you'd like help with.";
-    if (!payload.name) fieldErrors.name = "Enter your name.";
+    if (!payload.firstName) fieldErrors.firstName = "Enter your first name.";
+    if (!payload.lastName) fieldErrors.lastName = "Enter your last name.";
+    if (!payload.phone) fieldErrors.phone = "Enter your phone number.";
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(payload.email)) {
       fieldErrors.email = "Enter a valid email address.";
     }
@@ -90,30 +92,21 @@ export function ContactFormFields({
         return;
       }
       const body = await res.json();
-      setStatus(body.delivered ? "delivered" : "undelivered");
-      if (body.delivered) form.reset();
+      if (body.delivered) {
+        setStatus("success");
+        form.reset();
+      } else {
+        setStatus("error");
+      }
     } catch {
       setStatus("error");
     }
   }
 
-  if (status === "delivered" || status === "undelivered") {
+  if (status === "success") {
     return (
-      <div role="status" aria-live="polite" className="rounded-2xl border border-hairline bg-white p-8">
-        <h2 className="text-lg font-semibold text-ink">
-          {status === "delivered" ? "Message sent" : "Message received"}
-        </h2>
-        <p className="mt-2 max-w-prose text-base text-slate">
-          {status === "delivered"
-            ? "A broker will follow up using the channel you preferred."
-            : "Our inbox integration isn't fully connected yet in this environment, so please also reach us directly while we finish wiring it up."}
-        </p>
-        <a
-          href="#messenger"
-          className="mt-4 inline-block text-sm font-medium text-emerald-deep underline underline-offset-4 hover:text-ink"
-        >
-          Message us on Messenger instead
-        </a>
+      <div role="status" aria-live="polite" className="rounded-2xl border border-hairline bg-white p-8 text-center">
+        <p className="text-base font-medium text-ink">Message received. A PRC-licensed broker will be in touch with you shortly.</p>
       </div>
     );
   }
@@ -187,24 +180,46 @@ export function ContactFormFields({
         )}
       </fieldset>
 
-      <div>
-        <label htmlFor="field-name" className="mb-1 block text-sm font-medium text-ink">
-          Full name
-        </label>
-        <input
-          id="field-name"
-          name="name"
-          type="text"
-          autoComplete="name"
-          aria-invalid={Boolean(errors.name)}
-          aria-describedby={errors.name ? "field-name-error" : undefined}
-          className="w-full rounded-lg border border-slate/50 px-3 py-2.5 text-base text-ink focus:outline-none"
-        />
-        {errors.name && (
-          <p id="field-name-error" className="mt-1 text-sm text-error">
-            {errors.name}
-          </p>
-        )}
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+        <div>
+          <label htmlFor="field-firstName" className="mb-1 block text-sm font-medium text-ink">
+            First name
+          </label>
+          <input
+            id="field-firstName"
+            name="firstName"
+            type="text"
+            autoComplete="given-name"
+            aria-invalid={Boolean(errors.firstName)}
+            aria-describedby={errors.firstName ? "field-firstName-error" : undefined}
+            className="w-full rounded-lg border border-slate/50 px-3 py-2.5 text-base text-ink focus:outline-none"
+          />
+          {errors.firstName && (
+            <p id="field-firstName-error" className="mt-1 text-sm text-error">
+              {errors.firstName}
+            </p>
+          )}
+        </div>
+
+        <div>
+          <label htmlFor="field-lastName" className="mb-1 block text-sm font-medium text-ink">
+            Last name
+          </label>
+          <input
+            id="field-lastName"
+            name="lastName"
+            type="text"
+            autoComplete="family-name"
+            aria-invalid={Boolean(errors.lastName)}
+            aria-describedby={errors.lastName ? "field-lastName-error" : undefined}
+            className="w-full rounded-lg border border-slate/50 px-3 py-2.5 text-base text-ink focus:outline-none"
+          />
+          {errors.lastName && (
+            <p id="field-lastName-error" className="mt-1 text-sm text-error">
+              {errors.lastName}
+            </p>
+          )}
+        </div>
       </div>
 
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
@@ -231,7 +246,7 @@ export function ContactFormFields({
 
         <div>
           <label htmlFor="field-phone" className="mb-1 block text-sm font-medium text-ink">
-            Phone <span className="font-normal text-slate">(optional)</span>
+            Phone
           </label>
           <input
             id="field-phone"
@@ -239,45 +254,16 @@ export function ContactFormFields({
             type="tel"
             inputMode="tel"
             autoComplete="tel"
+            aria-invalid={Boolean(errors.phone)}
+            aria-describedby={errors.phone ? "field-phone-error" : undefined}
             className="w-full rounded-lg border border-slate/50 px-3 py-2.5 text-base text-ink focus:outline-none"
           />
+          {errors.phone && (
+            <p id="field-phone-error" className="mt-1 text-sm text-error">
+              {errors.phone}
+            </p>
+          )}
         </div>
-      </div>
-
-      <fieldset>
-        <legend className="mb-2 text-sm font-medium text-ink">
-          Preferred contact channel <span className="font-normal text-slate">(optional)</span>
-        </legend>
-        <div className="flex flex-wrap gap-3">
-          {["email", "phone", "messenger"].map((channel) => (
-            <label
-              key={channel}
-              className="flex min-h-11 items-center gap-2 rounded-full border border-slate/40 px-4 py-2 text-sm capitalize text-ink has-[:checked]:border-emerald-deep has-[:checked]:bg-emerald/8"
-            >
-              <input
-                type="radio"
-                name="preferredChannel"
-                value={channel}
-                className="h-4 w-4 accent-emerald-deep"
-              />
-              {channel}
-            </label>
-          ))}
-        </div>
-      </fieldset>
-
-      <div>
-        <label htmlFor="field-preferred-time" className="mb-1 block text-sm font-medium text-ink">
-          Preferred time to contact you{" "}
-          <span className="font-normal text-slate">(optional, include your timezone)</span>
-        </label>
-        <input
-          id="field-preferred-time"
-          name="preferredTime"
-          type="text"
-          placeholder="e.g. weekday evenings, GMT+8"
-          className="w-full rounded-lg border border-slate/50 px-3 py-2.5 text-base text-ink placeholder:text-slate focus:outline-none"
-        />
       </div>
 
       <div>

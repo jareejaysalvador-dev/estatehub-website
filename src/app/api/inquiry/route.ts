@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { getSupabaseClient } from "@/supabase/client";
 
 // Security-spec-compliant inquiry handler:
 // - allowlisted enums, length caps, header-injection stripping
@@ -8,13 +9,13 @@ import { NextResponse } from "next/server";
 //   multi-instance deployment needs a shared store (e.g. Upstash, Vercel
 //   KV), not this Map. Flagged, not solved, per the security spec's
 //   "architecture-pending" list.
-// - no destination is configured yet (no email/CRM credentials exist per
-//   the build plan's explicit exclusions) - inquiries are logged
-//   server-side and the API honestly reports delivered:false so the UI
-//   can show the Messenger/email fallback rather than a fake success.
+// - inserts directly into Supabase (the `leads` table) using the
+//   publishable key server-side; a public insert-only RLS policy on that
+//   table is what actually gates this, not key secrecy. Supersedes the
+//   earlier INQUIRY_WEBHOOK_URL/GHL forwarding design - Supabase is now
+//   the permanent lead destination, not GHL.
 
 const INTENTS = ["buy", "rent", "sell", "manage", "business", "overseas"] as const;
-const CHANNELS = ["email", "phone", "messenger"] as const;
 const MIN_SUBMIT_MS = 3000;
 const RATE_LIMIT_WINDOW_MS = 60_000;
 const RATE_LIMIT_MAX = 5;
@@ -62,66 +63,60 @@ export async function POST(request: Request) {
   }
 
   const intent = String(body.intent ?? "");
-  const preferredChannel = String(body.preferredChannel ?? "");
-  const name = stripHeaderInjection(String(body.name ?? "")).slice(0, 120);
+  const firstName = stripHeaderInjection(String(body.firstName ?? "")).slice(0, 80);
+  const lastName = stripHeaderInjection(String(body.lastName ?? "")).slice(0, 80);
   const email = stripHeaderInjection(String(body.email ?? "")).slice(0, 200);
   const phone = stripHeaderInjection(String(body.phone ?? "")).slice(0, 40);
-  const preferredTime = stripHeaderInjection(String(body.preferredTime ?? "")).slice(0, 160);
   const message = String(body.message ?? "").slice(0, 2000);
-  const property = stripHeaderInjection(String(body.property ?? "")).slice(0, 120);
+  const listingTitle = stripHeaderInjection(String(body.listingTitle ?? "")).slice(0, 200);
 
   const errors: Record<string, string> = {};
   if (!INTENTS.includes(intent as (typeof INTENTS)[number])) {
     errors.intent = "Choose what you'd like help with.";
   }
-  if (!name) {
-    errors.name = "Enter your name.";
+  if (!firstName) {
+    errors.firstName = "Enter your first name.";
+  }
+  if (!lastName) {
+    errors.lastName = "Enter your last name.";
+  }
+  if (!phone) {
+    errors.phone = "Enter your phone number.";
   }
   const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!emailPattern.test(email)) {
     errors.email = "Enter a valid email address.";
-  }
-  if (preferredChannel && !CHANNELS.includes(preferredChannel as (typeof CHANNELS)[number])) {
-    errors.preferredChannel = "Choose a valid contact channel.";
   }
 
   if (Object.keys(errors).length > 0) {
     return NextResponse.json({ errors }, { status: 400 });
   }
 
-  const destination = process.env.INQUIRY_WEBHOOK_URL;
-
-  if (!destination) {
-    console.log("[inquiry] no INQUIRY_WEBHOOK_URL configured, received:", {
-      intent,
-      name,
-      email,
-      phone,
-      preferredChannel,
-      preferredTime,
-      property,
-      messageLength: message.length,
-    });
-    return NextResponse.json({ delivered: false });
+  const supabase = getSupabaseClient();
+  if (!supabase) {
+    console.error("[inquiry] SUPABASE_URL or SUPABASE_PUBLISHABLE_KEY is not configured.");
+    return NextResponse.json({ delivered: false }, { status: 500 });
   }
 
-  try {
-    const forwarded = await fetch(destination, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        intent,
-        name,
-        email,
-        phone,
-        preferredChannel,
-        preferredTime,
-        property,
-        message,
-      }),
-    });
-    return NextResponse.json({ delivered: forwarded.ok });
-  } catch {
-    return NextResponse.json({ delivered: false });
+  // Zero real listings exist yet, so this is a no-op today - kept so the
+  // context isn't silently dropped once real inventory lands, without
+  // needing a dedicated column for it.
+  const notes = listingTitle ? `Regarding: ${listingTitle}\n\n${message}` : message;
+
+  const { error } = await supabase.from("leads").insert({
+    first_name: firstName,
+    last_name: lastName,
+    phone,
+    email,
+    source: "Website Contact Form",
+    property_interest: intent,
+    notes: notes || null,
+  });
+
+  if (error) {
+    console.error("[inquiry] Supabase insert failed:", error.message);
+    return NextResponse.json({ delivered: false }, { status: 502 });
   }
+
+  return NextResponse.json({ delivered: true });
 }
