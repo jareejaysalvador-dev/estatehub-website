@@ -101,14 +101,14 @@ export const listing = defineType({
       title: 'About this property',
       type: 'text',
       rows: 3,
-      validation: (rule) => rule.required(),
+      description: 'Optional - the site hides this section entirely on a listing until it has real copy, rather than showing it empty.',
     }),
     defineField({
       name: 'neighborhood',
       title: 'About the neighborhood',
       type: 'text',
       rows: 3,
-      validation: (rule) => rule.required(),
+      description: 'Optional - the site hides this section entirely on a listing until it has real copy, rather than showing it empty.',
     }),
     defineField({
       name: 'photos',

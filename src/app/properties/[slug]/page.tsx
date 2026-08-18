@@ -29,7 +29,8 @@ export async function generateMetadata({
   if (!listing) return {};
   return {
     title: listing.title,
-    description: listing.blurb,
+    description:
+      listing.blurb ?? `${listing.title} — ${listing.status} in ${listing.location}.`,
   };
 }
 
@@ -112,19 +113,27 @@ export default async function PropertyDetailPage({
               </div>
             )}
 
-            <h2 className="mt-8 text-lg font-semibold text-ink">
-              About this property
-            </h2>
-            <p className="mt-2 max-w-[65ch] text-base leading-relaxed text-ink/85">
-              {listing.blurb}
-            </p>
+            {listing.blurb && (
+              <>
+                <h2 className="mt-8 text-lg font-semibold text-ink">
+                  About this property
+                </h2>
+                <p className="mt-2 max-w-[65ch] text-base leading-relaxed text-ink/85">
+                  {listing.blurb}
+                </p>
+              </>
+            )}
 
-            <h2 className="mt-8 text-lg font-semibold text-ink">
-              About the neighborhood
-            </h2>
-            <p className="mt-2 max-w-[65ch] text-base leading-relaxed text-ink/85">
-              {listing.neighborhood}
-            </p>
+            {listing.neighborhood && (
+              <>
+                <h2 className="mt-8 text-lg font-semibold text-ink">
+                  About the neighborhood
+                </h2>
+                <p className="mt-2 max-w-[65ch] text-base leading-relaxed text-ink/85">
+                  {listing.neighborhood}
+                </p>
+              </>
+            )}
           </div>
         </div>
 

@@ -31,8 +31,8 @@ export interface Listing {
   lotAreaSqm: number | null;
   /** First photo is the cover */
   photos: ResolvedImage[];
-  blurb: string;
-  neighborhood: string;
+  blurb: string | null;
+  neighborhood: string | null;
   broker: Broker;
 }
 
