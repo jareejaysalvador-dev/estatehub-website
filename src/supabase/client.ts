@@ -25,7 +25,7 @@ export async function fetchLeadsSinceId(sinceId: number) {
   if (!url || !serviceRoleKey) return null;
 
   const columns =
-    "id,created_at,first_name,last_name,phone,email,property_interest,source,notes";
+    "id,created_at,first_name,last_name,phone,email,property_interest,source,notes,regarding_property";
   const response = await fetch(
     `${url}/rest/v1/leads?id=gt.${sinceId}&order=id.asc&select=${columns}`,
     {

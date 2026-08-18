@@ -99,11 +99,6 @@ export async function POST(request: Request) {
     return NextResponse.json({ delivered: false }, { status: 500 });
   }
 
-  // Zero real listings exist yet, so this is a no-op today - kept so the
-  // context isn't silently dropped once real inventory lands, without
-  // needing a dedicated column for it.
-  const notes = listingTitle ? `Regarding: ${listingTitle}\n\n${message}` : message;
-
   const { error } = await supabase.from("leads").insert({
     first_name: firstName,
     last_name: lastName,
@@ -111,7 +106,8 @@ export async function POST(request: Request) {
     email,
     source: "Website Contact Form",
     property_interest: intent,
-    notes: notes || null,
+    notes: message || null,
+    regarding_property: listingTitle || null,
   });
 
   if (error) {
