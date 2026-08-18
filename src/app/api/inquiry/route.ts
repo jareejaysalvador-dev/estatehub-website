@@ -123,13 +123,16 @@ export async function POST(request: Request) {
   // email that fails to send should not turn a successful submission
   // into an error response.
   try {
-    await sendEmail({
+    const emailResult = await sendEmail({
       from: "EstateHub.ph <notifications@estatehub.ph>",
       to: email,
       replyTo: "estatehub.ph@gmail.com",
       subject: `We've received your inquiry, ${firstName}`,
       text: `Hi ${firstName},\n\nThanks for reaching out to EstateHub. Your inquiry has been received, and a PRC-licensed broker will follow up with you shortly, one person, from your first message onward.\n\nIf there's anything else you'd like to add in the meantime, feel free to reply directly to this email.\n\nTalk soon,\nThe EstateHub Team`,
     });
+    if (emailResult === null) {
+      console.error("[inquiry] RESEND_API_KEY is not configured - confirmation email skipped.");
+    }
   } catch (emailError) {
     console.error("[inquiry] Confirmation email failed to send:", emailError);
   }
