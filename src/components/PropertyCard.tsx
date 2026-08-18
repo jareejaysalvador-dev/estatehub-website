@@ -8,7 +8,7 @@ export function PropertyCard({ listing }: { listing: Listing }) {
 
   return (
     <Link
-      href={`/properties/${listing.slug}`}
+      href={`/properties/${encodeURIComponent(listing.slug)}`}
       className="group block overflow-hidden rounded-2xl border border-hairline bg-white transition-all hover:-translate-y-0.5 hover:border-emerald hover:shadow-lg"
     >
       <div className="relative aspect-[4/3] overflow-hidden">

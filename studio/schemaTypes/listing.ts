@@ -15,8 +15,25 @@ export const listing = defineType({
       name: 'slug',
       title: 'Slug',
       type: 'slug',
-      options: {source: 'title', maxLength: 96},
-      validation: (rule) => rule.required(),
+      description:
+        'Click "Generate" - do not type this by hand. It becomes the page URL, so it must be lowercase words separated by hyphens (e.g. "cypress-single-detached-unit-4a"), never plain text with spaces or capitals.',
+      options: {
+        source: 'title',
+        maxLength: 96,
+        slugify: (input: string) =>
+          input
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, '-')
+            .replace(/^-+|-+$/g, '')
+            .slice(0, 96),
+      },
+      validation: (rule) =>
+        rule.required().custom((value) => {
+          if (!value?.current) return 'Required.'
+          return /^[a-z0-9]+(-[a-z0-9]+)*$/.test(value.current)
+            ? true
+            : 'Must be lowercase letters, numbers, and hyphens only, with no spaces - click "Generate" instead of typing it directly.'
+        }),
     }),
     defineField({
       name: 'status',
