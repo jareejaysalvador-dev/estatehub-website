@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getSupabaseClient } from "@/supabase/client";
+import { sendEmail } from "@/resend/client";
 
 // Security-spec-compliant inquiry handler:
 // - allowlisted enums, length caps, header-injection stripping
@@ -116,6 +117,21 @@ export async function POST(request: Request) {
   if (error) {
     console.error("[inquiry] Supabase insert failed:", error.message);
     return NextResponse.json({ delivered: false }, { status: 502 });
+  }
+
+  // Best-effort: the lead is already captured above, so a confirmation
+  // email that fails to send should not turn a successful submission
+  // into an error response.
+  try {
+    await sendEmail({
+      from: "EstateHub.ph <notifications@estatehub.ph>",
+      to: email,
+      replyTo: "estatehub.ph@gmail.com",
+      subject: `We've received your inquiry, ${firstName}`,
+      text: `Hi ${firstName},\n\nThanks for reaching out to EstateHub. Your inquiry has been received, and a PRC-licensed broker will follow up with you shortly, one person, from your first message onward.\n\nIf there's anything else you'd like to add in the meantime, feel free to reply directly to this email.\n\nTalk soon,\nThe EstateHub Team`,
+    });
+  } catch (emailError) {
+    console.error("[inquiry] Confirmation email failed to send:", emailError);
   }
 
   return NextResponse.json({ delivered: true });
