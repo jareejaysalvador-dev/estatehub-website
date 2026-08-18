@@ -124,8 +124,8 @@ export const listing = defineType({
               name: 'alt',
               title: 'Alt text',
               type: 'string',
-              description: 'Describe what is actually in the photo - required for every image.',
-              validation: (rule) => rule.required(),
+              description:
+                'Optional, but real screen-reader users get nothing from this photo without it. Describe what is actually in it if you can.',
             }),
           ],
         },
