@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Privacy Policy",
-  description: "How EstateHub.ph collects, uses, and protects your personal data.",
-};
+export const metadata: Metadata = pageMetadata(
+  "Privacy Policy",
+  "How EstateHub.ph collects, uses, and protects your personal data.",
+);
 
 export default function PrivacyPage() {
   return (

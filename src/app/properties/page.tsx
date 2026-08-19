@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 import { PropertiesResults } from "./PropertiesResults";
 import { getAllPropertyGridItems } from "@/sanity/queries";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Properties for Sale and Lease",
-  description:
-    "Browse EstateHub.ph property listings for sale and lease across the Philippines, backed by a licensed broker on every transaction.",
-};
+export const metadata: Metadata = pageMetadata(
+  "Properties for Sale and Lease",
+  "Browse EstateHub.ph property listings for sale and lease across the Philippines, backed by a licensed broker on every transaction.",
+);
 
 export default async function PropertiesPage() {
   const items = await getAllPropertyGridItems();

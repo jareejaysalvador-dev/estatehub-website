@@ -4,7 +4,12 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { MessengerWidget } from "@/components/MessengerWidget";
 import { FloatingContactButton } from "@/components/FloatingContactButton";
+import { SITE_URL } from "@/lib/site";
 import "./globals.css";
+
+const DEFAULT_TITLE = "EstateHub.ph | Full-Service Real Estate Brokerage in the Philippines";
+const DEFAULT_DESCRIPTION =
+  "Licensed brokers for buying, selling, leasing, and managing property across the Philippines. One point of contact from first call to closing.";
 
 const ebGaramond = EB_Garamond({
   variable: "--font-eb-garamond",
@@ -25,16 +30,24 @@ const montserrat = Montserrat({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: {
-    default: "EstateHub.ph | Full-Service Real Estate Brokerage in the Philippines",
+    default: DEFAULT_TITLE,
     template: "%s | EstateHub.ph",
   },
-  description:
-    "Licensed brokers for buying, selling, leasing, and managing property across the Philippines. One point of contact from first call to closing.",
-  // PRE-LAUNCH: site-wide noindex while listings/broker roster are sample
-  // data (see estatehub_handoff/analysis/seo-plan.md, punch-list item 13).
-  // Remove this block once real inventory replaces the sample listings.
-  robots: { index: false, follow: false },
+  description: DEFAULT_DESCRIPTION,
+  openGraph: {
+    title: DEFAULT_TITLE,
+    description: DEFAULT_DESCRIPTION,
+    siteName: "EstateHub.ph",
+    type: "website",
+    locale: "en_PH",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: DEFAULT_TITLE,
+    description: DEFAULT_DESCRIPTION,
+  },
 };
 
 export default function RootLayout({

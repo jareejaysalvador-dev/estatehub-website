@@ -2,12 +2,12 @@ import type { Metadata } from "next";
 import { Clock, EnvelopeSimple, Phone } from "@phosphor-icons/react/dist/ssr";
 import { ContactForm } from "./ContactForm";
 import { getSiteSettings } from "@/sanity/queries";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Contact Us",
-  description:
-    "Talk to a licensed EstateHub broker about buying, selling, leasing, managing, or a business property in the Philippines.",
-};
+export const metadata: Metadata = pageMetadata(
+  "Contact Us",
+  "Talk to a licensed EstateHub broker about buying, selling, leasing, managing, or a business property in the Philippines.",
+);
 
 export default async function ContactPage() {
   const settings = await getSiteSettings();

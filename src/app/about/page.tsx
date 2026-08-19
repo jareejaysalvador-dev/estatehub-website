@@ -9,12 +9,12 @@ import {
 } from "@phosphor-icons/react/dist/ssr";
 import { Reveal } from "@/components/Reveal";
 import { getAllBrokers } from "@/sanity/queries";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "About EstateHub",
-  description:
-    "EstateHub is a full-service Philippine real estate brokerage: licensed brokers, one point of contact, for buying, selling, leasing, and managing property.",
-};
+export const metadata: Metadata = pageMetadata(
+  "About EstateHub",
+  "EstateHub is a full-service Philippine real estate brokerage: licensed brokers, one point of contact, for buying, selling, leasing, and managing property.",
+);
 
 const PRINCIPLES = [
   {

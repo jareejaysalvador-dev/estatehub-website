@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Terms of Use",
-  description: "Terms governing use of the EstateHub.ph website.",
-};
+export const metadata: Metadata = pageMetadata(
+  "Terms of Use",
+  "Terms governing use of the EstateHub.ph website.",
+);
 
 export default function TermsPage() {
   return (

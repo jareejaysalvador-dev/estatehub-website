@@ -7,12 +7,12 @@ import {
   ShieldCheck,
 } from "@phosphor-icons/react/dist/ssr";
 import { Reveal } from "@/components/Reveal";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Buying and Owning Property from Abroad",
-  description:
-    "How overseas Filipinos and other overseas buyers purchase, sell, and manage property in the Philippines remotely through EstateHub, including Power of Attorney and timezone-friendly contact.",
-};
+export const metadata: Metadata = pageMetadata(
+  "Buying and Owning Property from Abroad",
+  "How overseas Filipinos and other overseas buyers purchase, sell, and manage property in the Philippines remotely through EstateHub, including Power of Attorney and timezone-friendly contact.",
+);
 
 const PROCESS_STEPS = [
   "Consult with your broker online, on your schedule and timezone",

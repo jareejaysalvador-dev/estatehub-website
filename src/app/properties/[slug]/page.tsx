@@ -13,6 +13,7 @@ import { AgentBlock } from "@/components/property/AgentBlock";
 import { StickyInquireBar } from "@/components/property/StickyInquireBar";
 import { getListing, getAllListingSlugs } from "@/sanity/queries";
 import { formatPrice } from "@/sanity/types";
+import { pageMetadata, ogImageFromPhoto } from "@/lib/seo";
 
 export async function generateStaticParams() {
   const slugs = await getAllListingSlugs();
@@ -27,11 +28,11 @@ export async function generateMetadata({
   const { slug } = await params;
   const listing = await getListing(slug);
   if (!listing) return {};
-  return {
-    title: listing.title,
-    description:
-      listing.blurb ?? `${listing.title} — ${listing.status} in ${listing.location}.`,
-  };
+  return pageMetadata(
+    listing.title,
+    listing.blurb ?? `${listing.title} — ${listing.status} in ${listing.location}.`,
+    ogImageFromPhoto(listing.photos[0], listing.title),
+  );
 }
 
 export default async function PropertyDetailPage({

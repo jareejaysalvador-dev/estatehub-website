@@ -9,6 +9,7 @@ import { UnitTypes } from "@/components/development/UnitTypes";
 import { getDevelopment, getAllDevelopmentSlugs } from "@/sanity/queries";
 import { formatPriceRange } from "@/sanity/types";
 import { withDownloadFilename } from "@/sanity/file";
+import { pageMetadata, ogImageFromPhoto } from "@/lib/seo";
 
 export async function generateStaticParams() {
   const slugs = await getAllDevelopmentSlugs();
@@ -23,12 +24,12 @@ export async function generateMetadata({
   const { slug } = await params;
   const development = await getDevelopment(slug);
   if (!development) return {};
-  return {
-    title: development.title,
-    description:
-      development.blurb ??
+  return pageMetadata(
+    development.title,
+    development.blurb ??
       `${development.title} — Pre-selling development by ${development.developer} in ${development.location}.`,
-  };
+    ogImageFromPhoto(development.photos[0], development.title),
+  );
 }
 
 export default async function DevelopmentDetailPage({
