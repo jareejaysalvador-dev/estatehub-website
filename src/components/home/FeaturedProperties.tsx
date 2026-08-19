@@ -1,11 +1,12 @@
 import Link from "next/link";
 import { Reveal } from "@/components/Reveal";
 import { PropertyCard } from "@/components/PropertyCard";
-import { getAllListings } from "@/sanity/queries";
+import { DevelopmentCard } from "@/components/DevelopmentCard";
+import { getAllPropertyGridItems } from "@/sanity/queries";
 
 export async function FeaturedProperties() {
-  const listings = await getAllListings();
-  const featured = listings.slice(0, 4);
+  const items = await getAllPropertyGridItems();
+  const featured = items.slice(0, 4);
 
   return (
     <section className="overflow-x-hidden border-y border-hairline bg-white/40 py-16 lg:py-24">
@@ -28,12 +29,16 @@ export async function FeaturedProperties() {
       <Reveal delay={0.08} className="mt-8">
         {featured.length > 0 ? (
           <ul className="hide-scrollbar mx-auto flex max-w-7xl snap-x snap-mandatory gap-5 overflow-x-auto px-6 pb-2">
-            {featured.map((listing) => (
+            {featured.map((item) => (
               <li
-                key={listing.slug}
+                key={`${item.kind}-${item.slug}`}
                 className="w-[280px] shrink-0 snap-start sm:w-[320px]"
               >
-                <PropertyCard listing={listing} />
+                {item.kind === "listing" ? (
+                  <PropertyCard listing={item} />
+                ) : (
+                  <DevelopmentCard development={item} />
+                )}
               </li>
             ))}
           </ul>

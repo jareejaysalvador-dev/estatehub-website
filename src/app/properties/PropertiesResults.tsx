@@ -1,14 +1,36 @@
 "use client";
 
-import { useMemo } from "react";
-import { useSearchParams } from "next/navigation";
+import { useMemo, useSyncExternalStore } from "react";
 import Link from "next/link";
 import { MagnifyingGlass } from "@phosphor-icons/react";
 import { PropertyCard } from "@/components/PropertyCard";
-import type { Listing, ListingStatus, PropertyType } from "@/sanity/types";
+import { DevelopmentCard } from "@/components/DevelopmentCard";
+import type { PropertyGridItem, PropertyType } from "@/sanity/types";
+
+// Reads query params via window.location instead of next/navigation's
+// useSearchParams(): avoids a Suspense boundary entirely. Same fix
+// ContactForm.tsx already uses for the identical reason - a Suspense +
+// useSearchParams combination reproduces a permanent stuck-fallback hang
+// in this Next.js 16 / Turbopack dev environment (confirmed reproducible
+// here too, consistently across a full dev-server restart; the production
+// build itself was never affected). See ContactForm.tsx's own comment for
+// the fuller history - not repeated here.
+function subscribe(callback: () => void) {
+  window.addEventListener("popstate", callback);
+  return () => window.removeEventListener("popstate", callback);
+}
+
+function getSnapshot() {
+  return window.location.search;
+}
+
+function getServerSnapshot() {
+  return "";
+}
 
 const TYPES: PropertyType[] = ["House", "Condo", "Townhouse", "Lot", "Commercial"];
-const STATUSES: ListingStatus[] = ["For Sale", "For Lease"];
+const STATUS_OPTIONS = ["For Sale", "For Lease", "Pre-selling"] as const;
+type StatusOption = (typeof STATUS_OPTIONS)[number];
 
 // A location filter with fewer than 2 options is a dead control (its states
 // produce the same result set), so both the <select> and the URL param are
@@ -18,21 +40,37 @@ const MIN_LOCATIONS_FOR_FILTER = 2;
 const SELECT_CLASSES =
   "w-full rounded-lg border border-slate/50 bg-white px-3 py-2.5 text-base text-ink focus:outline-none";
 
-export function PropertiesResults({ listings }: { listings: Listing[] }) {
-  const params = useSearchParams();
+export function PropertiesResults({ items }: { items: PropertyGridItem[] }) {
+  const search = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+  // Force a fresh mount once the real client-side location is read (server
+  // snapshot is always ""), so the filters' `defaultValue`s (an
+  // uncontrolled-input default that only applies at mount) reflect the real
+  // URL instead of the empty server-rendered first pass - same reasoning as
+  // ContactForm.tsx's identical key={search} usage.
+  return <PropertiesResultsInner key={search} items={items} search={search} />;
+}
 
-  // Distinct locations from real listing data, deduped case/whitespace-
-  // insensitively (first-seen casing wins), alphabetical.
+function PropertiesResultsInner({
+  items,
+  search,
+}: {
+  items: PropertyGridItem[];
+  search: string;
+}) {
+  const params = new URLSearchParams(search);
+
+  // Distinct locations across both listings and developments, deduped
+  // case/whitespace-insensitively (first-seen casing wins), alphabetical.
   const locationOptions = useMemo(() => {
     const seen = new Map<string, string>(); // lowercase key -> display label
-    for (const listing of listings) {
-      const label = (listing.location ?? "").trim();
+    for (const item of items) {
+      const label = (item.location ?? "").trim();
       if (!label) continue;
       const key = label.toLowerCase();
       if (!seen.has(key)) seen.set(key, label);
     }
     return [...seen.values()].sort((a, b) => a.localeCompare(b));
-  }, [listings]);
+  }, [items]);
   const showLocationFilter = locationOptions.length >= MIN_LOCATIONS_FOR_FILTER;
 
   // Allowlist validation: anything unrecognized is treated as unset.
@@ -40,22 +78,40 @@ export function PropertiesResults({ listings }: { listings: Listing[] }) {
   const rawType = params.get("type");
   const type = TYPES.includes(rawType as PropertyType) ? (rawType as PropertyType) : "";
   const rawStatus = params.get("status");
-  const status = STATUSES.includes(rawStatus as ListingStatus)
-    ? (rawStatus as ListingStatus)
+  const status = STATUS_OPTIONS.includes(rawStatus as StatusOption)
+    ? (rawStatus as StatusOption)
     : "";
   const rawLocation = (params.get("location") ?? "").trim();
   const location = showLocationFilter
     ? (locationOptions.find((l) => l.toLowerCase() === rawLocation.toLowerCase()) ?? "")
     : "";
 
-  const results = listings.filter((listing) => {
-    if (type && listing.type !== type) return false;
-    if (status && listing.status !== status) return false;
-    if (location && (listing.location ?? "").trim().toLowerCase() !== location.toLowerCase())
+  const results = items.filter((item) => {
+    if (location && (item.location ?? "").trim().toLowerCase() !== location.toLowerCase()) {
       return false;
+    }
+
+    if (item.kind === "listing") {
+      if (status === "Pre-selling") return false;
+      if (status && item.status !== status) return false;
+      if (type && item.type !== type) return false;
+      if (query) {
+        const haystack = `${item.title} ${item.location} ${item.type}`.toLowerCase();
+        if (!haystack.includes(query.toLowerCase())) return false;
+      }
+      return true;
+    }
+
+    // development
+    if (status && status !== "Pre-selling") return false;
+    if (type && !item.unitTypes.some((unit) => unit.category === type)) return false;
     if (query) {
+      const categories = item.unitTypes
+        .map((unit) => unit.category)
+        .filter((category): category is PropertyType => category !== null)
+        .join(" ");
       const haystack =
-        `${listing.title} ${listing.location} ${listing.type}`.toLowerCase();
+        `${item.title} ${item.location} ${item.developer} ${categories}`.toLowerCase();
       if (!haystack.includes(query.toLowerCase())) return false;
     }
     return true;
@@ -126,7 +182,7 @@ export function PropertiesResults({ listings }: { listings: Listing[] }) {
           </label>
           <select id="filter-status" name="status" defaultValue={status} className={SELECT_CLASSES}>
             <option value="">Either</option>
-            {STATUSES.map((s) => (
+            {STATUS_OPTIONS.map((s) => (
               <option key={s} value={s}>
                 {s}
               </option>
@@ -151,9 +207,13 @@ export function PropertiesResults({ listings }: { listings: Listing[] }) {
 
       {results.length > 0 ? (
         <ul className="mt-4 grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
-          {results.map((listing) => (
-            <li key={listing.slug}>
-              <PropertyCard listing={listing} />
+          {results.map((item) => (
+            <li key={`${item.kind}-${item.slug}`}>
+              {item.kind === "listing" ? (
+                <PropertyCard listing={item} />
+              ) : (
+                <DevelopmentCard development={item} />
+              )}
             </li>
           ))}
         </ul>

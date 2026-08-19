@@ -1,7 +1,6 @@
-import { Suspense } from "react";
 import type { Metadata } from "next";
 import { PropertiesResults } from "./PropertiesResults";
-import { getAllListings } from "@/sanity/queries";
+import { getAllPropertyGridItems } from "@/sanity/queries";
 
 export const metadata: Metadata = {
   title: "Properties for Sale and Lease",
@@ -10,7 +9,7 @@ export const metadata: Metadata = {
 };
 
 export default async function PropertiesPage() {
-  const listings = await getAllListings();
+  const items = await getAllPropertyGridItems();
 
   return (
     <div className="mx-auto max-w-7xl px-6 py-12 lg:py-16">
@@ -23,9 +22,7 @@ export default async function PropertiesPage() {
       </p>
 
       <div className="mt-8">
-        <Suspense fallback={<p className="text-slate">Loading properties…</p>}>
-          <PropertiesResults listings={listings} />
-        </Suspense>
+        <PropertiesResults items={items} />
       </div>
     </div>
   );

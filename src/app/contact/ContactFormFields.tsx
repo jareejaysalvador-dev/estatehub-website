@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { WarningCircle } from "@phosphor-icons/react";
-import type { Listing } from "@/sanity/types";
+import type { InquiryReference } from "@/sanity/types";
 
 const INTENTS = [
   { value: "buy", label: "Buying a property" },
@@ -22,7 +22,7 @@ export function ContactFormFields({
 }: {
   initialIntent: string;
   propertySlug: string;
-  listing: Listing | undefined;
+  listing: InquiryReference | undefined;
 }) {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [status, setStatus] = useState<SubmitState>("idle");
