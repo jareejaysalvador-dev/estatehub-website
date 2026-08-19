@@ -33,13 +33,15 @@ export function AgentBlock({
         >
           Inquire about {listingTitle}
         </Link>
-        <a
-          href={`tel:${broker.phone.replace(/\s+/g, "")}`}
-          className="flex min-h-11 w-full items-center justify-center gap-2 rounded-full border border-slate/50 px-6 py-3 text-base font-medium text-ink transition-colors hover:border-emerald-deep"
-        >
-          <Phone size={18} weight="light" aria-hidden="true" />
-          {broker.phone}
-        </a>
+        {broker.phone && (
+          <a
+            href={`tel:${broker.phone.replace(/\s+/g, "")}`}
+            className="flex min-h-11 w-full items-center justify-center gap-2 rounded-full border border-slate/50 px-6 py-3 text-base font-medium text-ink transition-colors hover:border-emerald-deep"
+          >
+            <Phone size={18} weight="light" aria-hidden="true" />
+            {broker.phone}
+          </a>
+        )}
         <a
           href="#messenger"
           className="flex min-h-11 w-full items-center justify-center gap-2 text-sm font-medium text-emerald-deep underline underline-offset-4 hover:text-ink"
