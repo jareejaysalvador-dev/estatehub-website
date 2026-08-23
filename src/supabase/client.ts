@@ -43,3 +43,23 @@ export async function fetchLeadsSinceId(sinceId: number) {
 
   return response.json();
 }
+
+// service_role again, for the same reason: this needs to definitely reach
+// Supabase regardless of RLS, and the publishable key can only insert into
+// leads, not read it. Used solely by /api/keep-alive (Vercel Cron) to stop
+// the free-tier project from auto-pausing after 7 days with no API
+// activity - the query itself is throwaway, only the request reaching
+// Supabase matters.
+export async function pingDatabase() {
+  const url = process.env.SUPABASE_URL;
+  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!url || !serviceRoleKey) return false;
+
+  const response = await fetch(`${url}/rest/v1/leads?select=id&limit=1`, {
+    headers: {
+      apikey: serviceRoleKey,
+      Authorization: `Bearer ${serviceRoleKey}`,
+    },
+  });
+  return response.ok;
+}
