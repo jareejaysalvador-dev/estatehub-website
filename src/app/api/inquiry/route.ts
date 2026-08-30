@@ -108,6 +108,10 @@ export async function POST(request: Request) {
     property_interest: intent,
     notes: message || null,
     regarding_property: listingTitle || null,
+    // Generated for every lead, not only when a viewing gets offered -
+    // simplest option, and an unused token costs nothing. Powers the
+    // viewing-booking link (see /api/viewing/[token]).
+    booking_token: crypto.randomUUID(),
   });
 
   if (error) {

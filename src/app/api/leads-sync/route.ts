@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { fetchLeadsSinceId } from "@/supabase/client";
+import { fetchLeadsSinceId, fetchViewingUpdatesSince } from "@/supabase/client";
 
 // Internal-only endpoint for the Apps Script -> Google Sheet leads sync
 // (see C:\Users\jaree\Documents\estatehub-leads-sheet-sync on the owner's
@@ -20,7 +20,33 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const sinceIdParam = new URL(request.url).searchParams.get("since_id") ?? "0";
+  const params = new URL(request.url).searchParams;
+
+  // Two independent queries share this one endpoint (same secret, same
+  // caller): "since_id" for new leads (existing), "since_viewing" for
+  // leads whose viewing was booked after a given timestamp - an *already
+  // synced* row that Code.gs needs to find again and update, not append.
+  const sinceViewingParam = params.get("since_viewing");
+  if (sinceViewingParam !== null) {
+    const sinceDate = new Date(sinceViewingParam);
+    if (isNaN(sinceDate.getTime())) {
+      return NextResponse.json({ error: "Invalid since_viewing." }, { status: 400 });
+    }
+
+    try {
+      const updates = await fetchViewingUpdatesSince(sinceDate.toISOString());
+      if (updates === null) {
+        console.error("[leads-sync] Supabase service-role credentials are not configured.");
+        return NextResponse.json({ error: "Server is not configured." }, { status: 500 });
+      }
+      return NextResponse.json({ updates });
+    } catch (error) {
+      console.error("[leads-sync] Failed to fetch viewing updates:", error);
+      return NextResponse.json({ error: "Upstream request failed." }, { status: 502 });
+    }
+  }
+
+  const sinceIdParam = params.get("since_id") ?? "0";
   const sinceId = Number(sinceIdParam);
   if (!Number.isFinite(sinceId) || sinceId < 0) {
     return NextResponse.json({ error: "Invalid since_id." }, { status: 400 });
