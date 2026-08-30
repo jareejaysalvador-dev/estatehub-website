@@ -118,7 +118,6 @@ function BookingFormFields({ token, prefill }: { token: string; prefill: Prefill
     const fieldErrors: Record<string, string> = {};
     if (!payload.viewingDate) fieldErrors.viewingDate = "Choose a date.";
     if (!payload.viewingTime) fieldErrors.viewingTime = "Choose a preferred time.";
-    if (!payload.viewingProperty) fieldErrors.viewingProperty = "Property is required.";
     if (!payload.phone) fieldErrors.phone = "Enter a contact number.";
 
     if (Object.keys(fieldErrors).length > 0) {
@@ -199,26 +198,34 @@ function BookingFormFields({ token, prefill }: { token: string; prefill: Prefill
         </p>
       </div>
 
-      <div>
-        <label htmlFor="field-viewingProperty" className="mb-1 block text-sm font-medium text-ink">
-          Property
-        </label>
-        <input
-          id="field-viewingProperty"
-          name="viewingProperty"
-          type="text"
-          value={property}
-          onChange={(e) => setProperty(e.target.value)}
-          aria-invalid={Boolean(errors.viewingProperty)}
-          aria-describedby={errors.viewingProperty ? "field-viewingProperty-error" : undefined}
-          className="w-full rounded-lg border border-slate/50 px-3 py-2.5 text-base text-ink focus:outline-none"
-        />
-        {errors.viewingProperty && (
-          <p id="field-viewingProperty-error" className="mt-1 text-sm text-error">
-            {errors.viewingProperty}
-          </p>
-        )}
-      </div>
+      {prefill.property ? (
+        // Already known from the lead's original inquiry - shown, not
+        // asked. Matches the spec's own intent ("pre-filled, don't ask
+        // again") and Name's treatment just above, rather than making the
+        // lead confirm something the agent already told them.
+        <div>
+          <p className="mb-1 text-sm font-medium text-ink">Property</p>
+          <p className="text-base text-ink/85">{prefill.property}</p>
+          <input type="hidden" name="viewingProperty" value={property} />
+        </div>
+      ) : (
+        // Not known upstream (a general inquiry) - optional, not required:
+        // nothing here should block submission over a field the agent may
+        // already know verbally and simply didn't capture earlier.
+        <div>
+          <label htmlFor="field-viewingProperty" className="mb-1 block text-sm font-medium text-ink">
+            Property <span className="font-normal text-slate">(optional)</span>
+          </label>
+          <input
+            id="field-viewingProperty"
+            name="viewingProperty"
+            type="text"
+            value={property}
+            onChange={(e) => setProperty(e.target.value)}
+            className="w-full rounded-lg border border-slate/50 px-3 py-2.5 text-base text-ink focus:outline-none"
+          />
+        </div>
+      )}
 
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
         <div>

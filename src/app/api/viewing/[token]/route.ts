@@ -57,7 +57,6 @@ export async function POST(
   const errors: Record<string, string> = {};
   if (!/^\d{4}-\d{2}-\d{2}$/.test(viewingDate)) errors.viewingDate = "Choose a valid date.";
   if (!/^\d{2}:\d{2}$/.test(viewingTime)) errors.viewingTime = "Choose a preferred time.";
-  if (!viewingProperty) errors.viewingProperty = "Property is required.";
   if (!phone) errors.phone = "Enter a contact number.";
 
   if (Object.keys(errors).length > 0) {
@@ -86,11 +85,19 @@ export async function POST(
     return NextResponse.json({ error: "Booking link not found." }, { status: 404 });
   }
 
+  // Property is now optional (see BookingForm.tsx) - a general inquiry
+  // with no listing attached shouldn't force the lead to type one in just
+  // to submit. Every string below that mentions it has to degrade
+  // gracefully when it's blank, rather than reading as "for  on ...".
+  const propertySuffix = viewingProperty ? ` - ${viewingProperty}` : "";
+  const propertyPhrase = viewingProperty ? ` for ${viewingProperty}` : "";
+  const propertyLine = viewingProperty ? `Property: ${viewingProperty}\n` : "";
+
   const calendarLink = googleCalendarLink({
-    title: `Viewing (tentative): ${updated.first_name} ${updated.last_name} - ${viewingProperty}`,
+    title: `Viewing (tentative): ${updated.first_name} ${updated.last_name}${propertySuffix}`,
     date: viewingDate,
     time: viewingTime,
-    details: `Property: ${viewingProperty}\nContact: ${updated.first_name} ${updated.last_name}, ${phone}`,
+    details: `${propertyLine}Contact: ${updated.first_name} ${updated.last_name}, ${phone}`,
   });
 
   // Both emails are best-effort, same pattern as /api/inquiry: the viewing
@@ -102,7 +109,7 @@ export async function POST(
       to: updated.email,
       replyTo: "estatehub.ph@gmail.com",
       subject: `We've received your requested viewing, ${updated.first_name}`,
-      text: `Hi ${updated.first_name},\n\nWe've received your requested viewing for ${viewingProperty} on ${viewingDate} at ${viewingTime}. Your broker will confirm this with you shortly.\n\nTalk soon,\nThe EstateHub Team`,
+      text: `Hi ${updated.first_name},\n\nWe've received your requested viewing${propertyPhrase} on ${viewingDate} at ${viewingTime}. Your broker will confirm this with you shortly.\n\nTalk soon,\nThe EstateHub Team`,
     });
     if (emailResult === null) {
       console.error("[viewing] RESEND_API_KEY is not configured - lead confirmation email skipped.");
@@ -120,8 +127,8 @@ export async function POST(
       const emailResult = await sendEmail({
         from: "EstateHub.ph <notifications@estatehub.ph>",
         to: brokerEmail,
-        subject: `Viewing requested: ${updated.first_name} ${updated.last_name} - ${viewingProperty}`,
-        text: `${updated.first_name} ${updated.last_name} has requested a viewing:\n\nProperty: ${viewingProperty}\nRequested: ${viewingDate} at ${viewingTime}${viewersLine}\nPhone: ${phone}\n\nConfirm this time with them on Messenger - same conversation you were already in. Call ${phone} instead if that's easier.${calendarLine}`,
+        subject: `Viewing requested: ${updated.first_name} ${updated.last_name}${propertySuffix}`,
+        text: `${updated.first_name} ${updated.last_name} has requested a viewing:\n\n${propertyLine}Requested: ${viewingDate} at ${viewingTime}${viewersLine}\nPhone: ${phone}\n\nConfirm this time with them on Messenger - same conversation you were already in. Call ${phone} instead if that's easier.${calendarLine}`,
       });
       if (emailResult === null) {
         console.error("[viewing] RESEND_API_KEY is not configured - broker notification skipped.");

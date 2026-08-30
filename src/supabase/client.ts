@@ -139,7 +139,7 @@ export async function saveViewingDetails(
     body: JSON.stringify({
       viewing_date: details.viewingDate,
       viewing_time: details.viewingTime,
-      viewing_property: details.viewingProperty,
+      viewing_property: details.viewingProperty || null,
       viewing_viewers_count: details.viewersCount,
       viewing_booked_at: new Date().toISOString(),
       phone: details.phone,
