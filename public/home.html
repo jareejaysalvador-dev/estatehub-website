@@ -95,6 +95,35 @@
             </a>
             <span class="hero-note">PRC-licensed. One point of contact.</span>
           </div>
+          <form class="hero-search" method="get" action="/properties" role="search" aria-label="Search properties" data-reveal="fade" data-reveal-delay="500">
+            <div class="field">
+              <label for="hs-query">Location</label>
+              <input id="hs-query" name="query" type="text" maxlength="80" placeholder="City or neighborhood" autocomplete="off">
+            </div>
+            <div class="field field-select">
+              <label for="hs-type">Property type</label>
+              <select id="hs-type" name="type">
+                <option value="">Any type</option>
+                <option value="House">House</option>
+                <option value="Condo">Condo</option>
+                <option value="Townhouse">Townhouse</option>
+                <option value="Lot">Lot</option>
+                <option value="Commercial">Commercial</option>
+              </select>
+            </div>
+            <div class="field field-select">
+              <label for="hs-status">Buy or lease</label>
+              <select id="hs-status" name="status">
+                <option value="">Either</option>
+                <option value="For Sale">For Sale</option>
+                <option value="For Lease">For Lease</option>
+                <option value="Pre-selling">Pre-selling</option>
+              </select>
+            </div>
+            <button class="btn btn-search" type="submit">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>Search
+            </button>
+          </form>
           <div class="hero-progress" aria-hidden="true"></div>
         </div>
       </div>
@@ -251,19 +280,23 @@
   </div>
 </section>
 
-<!-- DEVELOPMENTS -->
-<section class="developments" aria-labelledby="dev-h">
+<!-- FEATURED PROPERTIES: the four newest listings and developments from the CMS, fetched from /api/featured by the script at the end of the page. Same rule as /properties. -->
+<section class="featured" aria-labelledby="featured-h">
   <div class="wrap">
     <div class="head">
-      <h2 id="dev-h" class="display" style="font-size: clamp(1.75rem, 3vw, 2.6rem);">Featured pre-selling developments</h2>
+      <h2 id="featured-h" class="display" style="font-size: clamp(1.75rem, 3vw, 2.6rem);">Featured properties</h2>
       <a class="textlink" href="/properties">View all properties</a>
     </div>
-    <ul data-stagger="90">
-      <li data-reveal="fade"><span class="tag">Pre-selling</span><h3>Terreno South by Rockwell</h3><p>Lipa, Batangas. Rockwell Land.</p></li>
-      <li data-reveal="fade"><span class="tag">Pre-selling</span><h3>Lauan Ridges by Rockwell</h3><p>Mataasnakahoy, Lipa, Batangas. Rockwell Land.</p></li>
-      <li data-reveal="fade"><span class="tag">Pre-selling</span><h3>8 Benitez Suites</h3><p>Quezon City. Rockwell Land.</p></li>
-      <li data-reveal="fade"><span class="tag">Pre-selling</span><h3>Aruga Resort and Residences, Mactan</h3><p>Mactan, Cebu. Rockwell Land.</p></li>
-    </ul>
+    <div class="featured-body" id="featured-body" aria-live="polite" aria-busy="true"><noscript><p class="featured-error"><a class="textlink" href="/properties">Browse all properties</a></p></noscript></div>
+    <template id="featured-empty">
+      <div class="featured-empty">
+        <p>New listings are on the way. Our brokers often know of properties before they reach the site. Tell us what you are looking for.</p>
+        <a class="btn" href="/contact">Contact us</a>
+      </div>
+    </template>
+    <template id="featured-error">
+      <p class="featured-error"><a class="textlink" href="/properties">Browse all properties</a></p>
+    </template>
   </div>
 </section>
 
@@ -331,6 +364,78 @@
   new IntersectionObserver(function (entries) {
     head.classList.toggle('is-solid', !entries[0].isIntersecting);
   }, { rootMargin: '-72px 0px 0px 0px', threshold: 0 }).observe(hero);
+})();
+</script>
+<script>
+/* Featured properties: fetched from /api/featured once the section is near the viewport. Every string from the API goes in as a text node. */
+(function () {
+  var body = document.getElementById('featured-body');
+  if (!body) { return; }
+  var started = false;
+
+  function el(tag, cls, text) {
+    var n = document.createElement(tag);
+    if (cls) { n.className = cls; }
+    if (text != null) { n.textContent = String(text); }
+    return n;
+  }
+  function clear() { while (body.firstChild) { body.removeChild(body.firstChild); } }
+  function show(templateId) {
+    var t = document.getElementById(templateId);
+    clear();
+    body.appendChild(t.content.cloneNode(true));
+    body.removeAttribute('aria-busy');
+  }
+  function safeHref(h) { return (typeof h === 'string' && h.charAt(0) === '/' && h.charAt(1) !== '/') ? h : '/properties'; }
+
+  function render(items) {
+    if (!items.length) { show('featured-empty'); return; }
+    var ul = el('ul', 'featured-grid');
+    items.forEach(function (it) {
+      var li = el('li'), a = el('a', 'card');
+      a.href = safeHref(it.href);
+      var media = el('div', 'media');
+      if (typeof it.imageUrl === 'string' && it.imageUrl.indexOf('https://cdn.sanity.io/') === 0) {
+        var img = el('img');
+        img.src = it.imageUrl; img.alt = it.imageAlt || ''; img.loading = 'lazy'; img.width = 800; img.height = 600;
+        media.appendChild(img);
+      }
+      media.appendChild(el('span', 'tag', it.tag));
+      a.appendChild(media);
+      var text = el('div', 'text');
+      text.appendChild(el('p', 'price', it.priceText));
+      text.appendChild(el('h3', null, it.title));
+      text.appendChild(el('p', 'loc', it.location));
+      a.appendChild(text);
+      li.appendChild(a);
+      ul.appendChild(li);
+    });
+    clear();
+    body.appendChild(ul);
+    body.removeAttribute('aria-busy');
+    requestAnimationFrame(function () { ul.classList.add('is-in'); });
+  }
+
+  function load() {
+    if (started) { return; }
+    started = true;
+    if (!window.fetch) { show('featured-error'); return; }
+    var ctrl = ('AbortController' in window) ? new AbortController() : null;
+    var timer = setTimeout(function () { if (ctrl) { ctrl.abort(); } }, 6000);
+    fetch('/api/featured', { signal: ctrl ? ctrl.signal : undefined, headers: { 'Accept': 'application/json' } })
+      .then(function (r) { if (!r.ok) { throw new Error('status ' + r.status); } return r.json(); })
+      .then(function (items) { clearTimeout(timer); render(Array.isArray(items) ? items : []); })
+      .catch(function () { clearTimeout(timer); show('featured-error'); });
+  }
+
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      if (entries.some(function (e) { return e.isIntersecting; })) { io.disconnect(); load(); }
+    }, { rootMargin: '600px 0px' });
+    io.observe(body);
+  } else {
+    load();
+  }
 })();
 </script>
 </body>
