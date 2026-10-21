@@ -1,6 +1,17 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // The homepage is the HERRA-built static page in public/home.html (assets in
+  // public/assets). The rewrite keeps the URL at "/" and runs before the app
+  // router, so src/app/page.tsx is bypassed; delete this block to restore the
+  // previous React homepage. Every other route is untouched.
+  async rewrites() {
+    return {
+      beforeFiles: [{ source: "/", destination: "/home.html" }],
+      afterFiles: [],
+      fallback: [],
+    };
+  },
   images: {
     // picsum.photos: placeholder photography for static marketing imagery
     // (ServicesBento) not managed by the CMS - hand-verified IDs, see

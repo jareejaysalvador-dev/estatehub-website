@@ -17,6 +17,9 @@ const eslintConfig = defineConfig([
     // Sanity Studio: a separate sub-project with its own eslint.config.mjs,
     // dependencies, and build output - not part of the Next.js app's lint.
     "studio/**",
+    // The homepage is a static page served from public/ (see the rewrite in
+    // next.config.ts); its scroll-engine scripts are shipped as-is, not app source.
+    "public/assets/**",
   ]),
 ]);
 
