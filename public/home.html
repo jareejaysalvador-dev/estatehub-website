@@ -95,10 +95,10 @@
             </a>
             <span class="hero-note">PRC-licensed. One point of contact.</span>
           </div>
-          <form class="hero-search" method="get" action="/properties" role="search" aria-label="Search properties" data-reveal="fade" data-reveal-delay="500">
+          <form class="hero-search" method="get" action="/properties" role="search" aria-label="Search properties">
             <div class="field">
               <label for="hs-query">Location</label>
-              <input id="hs-query" name="query" type="text" maxlength="80" placeholder="City or neighborhood" autocomplete="off">
+              <input id="hs-query" name="query" type="text" maxlength="80" placeholder="City or area" autocomplete="off">
             </div>
             <div class="field field-select">
               <label for="hs-type">Property type</label>
@@ -114,7 +114,7 @@
             <div class="field field-select">
               <label for="hs-status">Buy or lease</label>
               <select id="hs-status" name="status">
-                <option value="">Either</option>
+                <option value="">Buy or lease</option>
                 <option value="For Sale">For Sale</option>
                 <option value="For Lease">For Lease</option>
                 <option value="Pre-selling">Pre-selling</option>
@@ -287,7 +287,7 @@
       <h2 id="featured-h" class="display" style="font-size: clamp(1.75rem, 3vw, 2.6rem);">Featured properties</h2>
       <a class="textlink" href="/properties">View all properties</a>
     </div>
-    <div class="featured-body" id="featured-body" aria-live="polite" aria-busy="true"><noscript><p class="featured-error"><a class="textlink" href="/properties">Browse all properties</a></p></noscript></div>
+    <div class="featured-body" id="featured-body"><noscript><p class="featured-error"><a class="textlink" href="/properties">Browse all properties</a></p></noscript></div>
     <template id="featured-empty">
       <div class="featured-empty">
         <p>New listings are on the way. Our brokers often know of properties before they reach the site. Tell us what you are looking for.</p>
@@ -386,7 +386,15 @@
     body.appendChild(t.content.cloneNode(true));
     body.removeAttribute('aria-busy');
   }
-  function safeHref(h) { return (typeof h === 'string' && h.charAt(0) === '/' && h.charAt(1) !== '/') ? h : '/properties'; }
+  /* A card link must stay on this site. The browser's own URL parser decides what is same-origin: it strips tabs and
+     newlines and reads a backslash as a slash, so a string check on the first two characters is not enough. */
+  function safeHref(h) {
+    if (typeof h !== 'string' || h.charAt(0) !== '/') { return '/properties'; }
+    try {
+      var u = new URL(h, location.origin);
+      return u.origin === location.origin ? u.pathname + u.search + u.hash : '/properties';
+    } catch (e) { return '/properties'; }
+  }
 
   function render(items) {
     if (!items.length) { show('featured-empty'); return; }
@@ -419,12 +427,17 @@
   function load() {
     if (started) { return; }
     started = true;
+    body.setAttribute('aria-busy', 'true');
     if (!window.fetch) { show('featured-error'); return; }
     var ctrl = ('AbortController' in window) ? new AbortController() : null;
     var timer = setTimeout(function () { if (ctrl) { ctrl.abort(); } }, 6000);
     fetch('/api/featured', { signal: ctrl ? ctrl.signal : undefined, headers: { 'Accept': 'application/json' } })
       .then(function (r) { if (!r.ok) { throw new Error('status ' + r.status); } return r.json(); })
-      .then(function (items) { clearTimeout(timer); render(Array.isArray(items) ? items : []); })
+      .then(function (items) {
+        clearTimeout(timer);
+        if (!Array.isArray(items)) { throw new Error('unexpected response'); } /* not a list: the error state, never the empty state */
+        render(items);
+      })
       .catch(function () { clearTimeout(timer); show('featured-error'); });
   }
 

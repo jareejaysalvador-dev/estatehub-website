@@ -22,6 +22,7 @@
   --muted-on-dark: #AEB7C4;
   --rule: rgba(14, 26, 44, .16);
   --rule-on-dark: rgba(245, 242, 235, .18);
+  --ring-light: #178A57; /* Deep Emerald: keyboard focus ring on light surfaces (3.9:1 on porcelain, 3.5:1 on paper-2); plain emerald is 2.4:1 there */
 
   --font-display: "EB Garamond", "Garamond Fallback", Georgia, serif;
   --font-body: Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
@@ -49,7 +50,8 @@ body {
 img, picture, svg { display: block; max-width: 100%; }
 h1, h2, h3, h4, p, figure, ul, ol { margin: 0; }
 a { color: inherit; }
-:focus-visible { outline: 2px solid var(--emerald); outline-offset: 3px; }
+:focus-visible { outline: 2px solid var(--ring-light); outline-offset: 3px; }
+.on-dark :focus-visible, .site-head :focus-visible, .site-foot :focus-visible { outline-color: var(--emerald); }
 
 .display { font-family: var(--font-display); font-weight: 450; letter-spacing: -.012em; line-height: 1.02; text-wrap: balance; }
 .display em { font-style: italic; font-weight: 420; }
@@ -106,9 +108,13 @@ a { color: inherit; }
 .hero .sm-safe { position: relative; }
 .hero .sm-persistent {
   position: relative; z-index: 2; height: 100%; width: 100%;
-  display: flex; flex-direction: column; justify-content: flex-end;
+  display: flex; flex-direction: column; justify-content: flex-start;
   padding: clamp(4.5rem, 11vh, 6rem) var(--gutter) clamp(1.75rem, 5vh, 4.5rem);
 }
+/* The first child takes the free space, which keeps the text block at the bottom of the stage. Unlike
+   justify-content: flex-end, when the text does not fit the overflow goes down, where the scroll engine's
+   fit check can see it (and then uses the static hero), instead of up under the header where nothing can. */
+.hero .sm-persistent > h1 { margin-top: auto; }
 .hero h1 {
   font-size: clamp(2.5rem, min(7.2vw, 10.5vh), 7rem);
   max-width: 8.4em;
@@ -141,9 +147,10 @@ a { color: inherit; }
   width: 100%; height: 2.75rem; padding: 0 .8rem; margin: 0;
   border: 1px solid transparent; border-radius: 0;
   background: var(--porcelain); color: var(--text);
-  font: inherit; font-size: .9375rem; line-height: 1;
+  font: inherit; font-size: 1rem; line-height: 1; /* 16px minimum: iOS Safari zooms the page on focus below that */
   -webkit-appearance: none; appearance: none;
 }
+.hero .hero-search input { text-overflow: ellipsis; }
 .hero .hero-search input::placeholder { color: var(--muted); }
 .hero .hero-search select {
   padding-right: 2rem;
