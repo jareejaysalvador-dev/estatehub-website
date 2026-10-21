@@ -44,11 +44,25 @@ describe("toFeaturedItems", () => {
     expect(card.imageAlt).toBe("");
   });
 
+  it("shows a From price when priceTo equals priceFrom", () => {
+    const [card] = toFeaturedItems([development({ priceTo: 8900000 })]);
+    expect(card.priceText).toBe("From ₱8,900,000");
+  });
+
   it("keeps the input order and takes only the first four", () => {
-    const items = [1, 2, 3, 4, 5, 6].map((n) => listing({ slug: `l${n}`, title: `L${n}` }));
-    const cards = toFeaturedItems(items);
+    // The input is deliberately not sorted by slug, title or createdAt in either direction,
+    // so a re-sort inside toFeaturedItems (the query layer owns ordering) would change the result.
+    const input = [
+      { slug: "m-first", title: "M", createdAt: "2026-02-01T00:00:00Z" },
+      { slug: "z-second", title: "Z", createdAt: "2026-01-01T00:00:00Z" },
+      { slug: "b-third", title: "B", createdAt: "2026-04-01T00:00:00Z" },
+      { slug: "q-fourth", title: "Q", createdAt: "2026-03-01T00:00:00Z" },
+      { slug: "a-fifth", title: "A", createdAt: "2026-05-01T00:00:00Z" },
+      { slug: "c-sixth", title: "C", createdAt: "2026-06-01T00:00:00Z" },
+    ].map((overrides) => listing(overrides));
+    const cards = toFeaturedItems(input);
     expect(cards).toHaveLength(FEATURED_COUNT);
-    expect(cards.map((c) => c.slug)).toEqual(["l1", "l2", "l3", "l4"]);
+    expect(cards.map((c) => c.slug)).toEqual(["m-first", "z-second", "b-third", "q-fourth"]);
   });
 
   it("leaves the price empty when the CMS only holds a placeholder amount", () => {
