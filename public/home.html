@@ -57,6 +57,7 @@
 <link rel="stylesheet" href="assets/scroll-moments/scroll-moments.css">
 <link rel="stylesheet" href="assets/motion/motion.css">
 <link rel="stylesheet" href="assets/css/site.css">
+<noscript><style>.menu-toggle { display: none !important; }</style></noscript>
 </head>
 <body>
 
@@ -73,7 +74,24 @@
     </ul>
   </nav>
   <a class="btn" href="/contact">Contact us</a>
+  <button class="menu-toggle" id="menu-toggle" type="button" aria-expanded="false" aria-controls="menu-panel" aria-label="Menu">
+    <span class="menu-bars" aria-hidden="true"><span></span><span></span><span></span></span>
+  </button>
+  <div class="menu-panel" id="menu-panel">
+    <nav aria-label="Menu">
+      <ul>
+        <li><a href="/properties">Properties</a></li>
+        <li><a href="/services/sales">Services</a></li>
+        <li><a href="/overseas">Overseas buyers</a></li>
+        <li><a href="/about">About</a></li>
+        <li class="menu-contact"><a href="/contact">Contact us
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a></li>
+      </ul>
+    </nav>
+  </div>
 </header>
+<div class="menu-scrim" id="menu-scrim" aria-hidden="true"></div>
 
 <main>
 
@@ -364,6 +382,51 @@
   new IntersectionObserver(function (entries) {
     head.classList.toggle('is-solid', !entries[0].isIntersecting);
   }, { rootMargin: '-72px 0px 0px 0px', threshold: 0 }).observe(hero);
+})();
+</script>
+<script>
+/* Phone menu: a disclosure button plus a sheet under the header. The state lives in aria-expanded; while closed the sheet is visibility:hidden,
+   so its links are neither focusable nor read out. It closes on the button, Esc, a tap on the dimmed page, focus leaving the header,
+   a real scroll, or a switch to the desktop layout. UI state only, no reveal. */
+(function () {
+  var head = document.querySelector('.site-head'), toggle = document.getElementById('menu-toggle'),
+      panel = document.getElementById('menu-panel'), scrim = document.getElementById('menu-scrim');
+  if (!head || !toggle || !panel || !scrim) { return; }
+  var wide = window.matchMedia ? window.matchMedia('(min-width: 768px)') : null;
+  var isOpen = false, startY = 0;
+
+  function onKey(e) { if (e.key === 'Escape' || e.key === 'Esc') { close('toggle'); } }
+  function onScroll() { if (Math.abs(window.pageYOffset - startY) > 48) { close(); } }
+  function onFocusOut(e) { if (e.relatedTarget && !head.contains(e.relatedTarget)) { close('none'); } }
+
+  function open() {
+    if (isOpen) { return; }
+    isOpen = true; startY = window.pageYOffset;
+    head.classList.add('menu-open'); scrim.classList.add('is-open');
+    toggle.setAttribute('aria-expanded', 'true');
+    document.addEventListener('keydown', onKey);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    head.addEventListener('focusout', onFocusOut);
+    var first = panel.querySelector('a');
+    if (first) { first.focus({ preventScroll: true }); }
+  }
+  /* focus: 'toggle' puts it back on the button, 'none' leaves it alone (it is already moving somewhere), default restores it only if it was inside the sheet */
+  function close(focus) {
+    if (!isOpen) { return; }
+    isOpen = false;
+    head.classList.remove('menu-open'); scrim.classList.remove('is-open');
+    toggle.setAttribute('aria-expanded', 'false');
+    document.removeEventListener('keydown', onKey);
+    window.removeEventListener('scroll', onScroll);
+    head.removeEventListener('focusout', onFocusOut);
+    if (focus === 'toggle' || (focus !== 'none' && panel.contains(document.activeElement))) { toggle.focus({ preventScroll: true }); }
+  }
+
+  toggle.addEventListener('click', function () { if (isOpen) { close('toggle'); } else { open(); } });
+  scrim.addEventListener('click', function () { close(); });
+  window.addEventListener('pageshow', function (e) { if (e.persisted) { close('none'); } });
+  function onWide() { if (wide && wide.matches) { close('none'); } }
+  if (wide) { if (wide.addEventListener) { wide.addEventListener('change', onWide); } else if (wide.addListener) { wide.addListener(onWide); } }
 })();
 </script>
 <script>

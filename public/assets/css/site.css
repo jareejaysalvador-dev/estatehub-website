@@ -91,16 +91,70 @@ a { color: inherit; }
   transition: background .3s ease, backdrop-filter .3s ease;
 }
 .site-head.is-solid { background: rgba(9, 17, 32, .82); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+.site-head.menu-open { background: var(--ink); } /* phone menu open: the header and the sheet read as one surface */
 .site-head .lockup img { height: 32px; width: auto; }
-.site-head nav ul { list-style: none; display: flex; gap: 2rem; margin: 0; padding: 0; }
-.site-head nav a { text-decoration: none; font-size: .9375rem; font-weight: 500; opacity: .86; }
-.site-head nav a:hover { opacity: 1; border-bottom: 1px solid var(--mint); }
+.site-head > nav ul { list-style: none; display: flex; gap: 2rem; margin: 0; padding: 0; }
+.site-head > nav a { text-decoration: none; font-size: .9375rem; font-weight: 500; opacity: .86; }
+.site-head > nav a:hover { opacity: 1; border-bottom: 1px solid var(--mint); }
 .site-head .btn { padding: .8rem 1.1rem; font-size: .9375rem; }
+
+/* phone menu (under 768px): a button beside "Contact us" opens a sheet under the header. From 768px the inline nav above shows and
+   all three pieces below stay display:none, so the desktop header is untouched. They are interactive, so none of them carries data-reveal. */
+.menu-toggle, .menu-panel, .menu-scrim { display: none; }
+.menu-toggle {
+  flex: none; width: 44px; height: 44px; padding: 0; border: 0; background: none; cursor: pointer;
+  align-items: center; justify-content: center; color: inherit; font: inherit;
+  border-radius: 2px; -webkit-appearance: none; appearance: none; -webkit-tap-highlight-color: transparent;
+}
+.menu-toggle:focus-visible { outline-offset: -2px; } /* inside the 44px box, so the ring never touches "Contact us" 4px away */
+.menu-bars { position: relative; display: block; width: 20px; height: 14px; }
+.menu-bars span { position: absolute; left: 0; width: 100%; height: 0; border-top: 2px solid currentColor; transition: transform .2s ease, opacity .15s ease; }
+.menu-bars span:nth-child(1) { top: 0; }
+.menu-bars span:nth-child(2) { top: 6px; }
+.menu-bars span:nth-child(3) { top: 12px; }
+.menu-toggle[aria-expanded="true"] .menu-bars span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+.menu-toggle[aria-expanded="true"] .menu-bars span:nth-child(2) { opacity: 0; }
+.menu-toggle[aria-expanded="true"] .menu-bars span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
 @media (max-width: 767px) {
   .hero .hero-note { display: none; }
-  .site-head nav { display: none; }
+  .site-head { gap: 0; }
+  .site-head > nav { display: none; }
+  .site-head .lockup { margin-right: 1rem; }
   .site-head .lockup img { height: 28px; }
-  .site-head .btn { padding: .7rem .95rem; font-size: .875rem; }
+  .site-head .btn { margin-left: auto; padding: .7rem .95rem; font-size: .875rem; }
+  /* a 44px tap area that sits 4px from "Contact us", puts the three bars on the page gutter, and is no taller than the button, so the header keeps its height */
+  .menu-toggle { display: inline-flex; margin: -4px -12px -4px 4px; }
+  .menu-panel {
+    display: block; position: absolute; top: 100%; left: 0; right: 0;
+    max-height: calc(100vh - 4.5rem); max-height: calc(100dvh - 4.5rem); overflow-y: auto; overscroll-behavior: contain;
+    background: var(--ink); border-bottom: 1px solid var(--rule-on-dark);
+    visibility: hidden; opacity: 0; transform: translateY(-.5rem);
+    transition: opacity .2s ease, transform .2s ease, visibility 0s linear .2s;
+  }
+  .site-head.menu-open .menu-panel { visibility: visible; opacity: 1; transform: none; transition: opacity .2s ease, transform .2s ease, visibility 0s; }
+  .menu-panel ul { list-style: none; margin: 0; padding: 0; }
+  .menu-panel li + li { border-top: 1px solid var(--rule-on-dark); }
+  .menu-panel a {
+    display: flex; align-items: center; justify-content: space-between; gap: .75rem; min-height: 3.25rem; padding: 0 var(--gutter);
+    color: var(--text-on-dark); font-size: 1.0625rem; font-weight: 500; line-height: 1.3; text-decoration: none; -webkit-tap-highlight-color: transparent;
+  }
+  .menu-panel a:hover, .menu-panel a:active { background: rgba(245, 242, 235, .06); }
+  .menu-panel a:focus-visible { outline-offset: -4px; }
+  .menu-panel .menu-contact a { color: var(--emerald); }
+  .menu-panel svg { width: 1.05em; height: 1.05em; flex: none; }
+  .menu-scrim {
+    display: block; position: fixed; inset: 0; z-index: 49; background: rgba(9, 17, 32, .55);
+    opacity: 0; visibility: hidden; transition: opacity .2s ease, visibility 0s linear .2s;
+  }
+  .menu-scrim.is-open { opacity: 1; visibility: visible; transition: opacity .2s ease, visibility 0s; }
+}
+@media (max-width: 304px) { /* very narrow screens (a folded foldable is about 280px): keep logo, Contact us and the menu button on one line */
+  .site-head .lockup { margin-right: .5rem; }
+  .site-head .lockup img { height: 24px; }
+  .site-head .btn { padding: .7rem .8rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .menu-bars span, .menu-panel, .site-head.menu-open .menu-panel, .menu-scrim, .menu-scrim.is-open { transition: none; }
 }
 
 /* ---------- hero (HERRA S1 moment: two chapters, dusk to night) ---------- */
