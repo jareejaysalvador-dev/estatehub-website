@@ -150,7 +150,7 @@ a { color: inherit; }
   background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235B6470' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
   background-repeat: no-repeat; background-position: right .7rem center; background-size: 1rem;
 }
-.hero .hero-search .btn-search { height: 2.75rem; padding: 0 1.1rem; background: var(--porcelain); color: var(--ink); }
+.hero .hero-search .btn-search { height: 2.75rem; padding: 0 1.1rem; border: 0; cursor: pointer; background: var(--porcelain); color: var(--ink); }
 .hero .hero-search .btn-search:hover { background: #ffffff; }
 @media (max-width: 767px) {
   .hero .hero-search { grid-template-columns: minmax(0, 1fr) auto; gap: .5rem; padding: .6rem; max-width: none; margin-top: 1rem; }
@@ -214,6 +214,18 @@ html[data-sm="live"] .hero:not([data-sm-state="static"]) .hero-progress {
 }
 html[data-sm="live"] .hero:not([data-sm-state="static"]) .hero-progress::after {
   content: ""; position: absolute; inset: 0; background: var(--mint); transform-origin: 0 50%; transform: scaleX(var(--sm-p, 0));
+}
+
+/* short windows: the pinned hero text is bottom-anchored, so the search must not push the headline under the fixed header.
+   Labels go visually hidden (the first option of each select reads as its label), the headline scales a little less, the scroll cue is tucked closer. */
+@media (min-width: 768px) and (max-height: 640px) {
+  .hero h1 { font-size: clamp(2.25rem, min(7.2vw, 8.5vh), 7rem); }
+  .hero .hero-search { margin-top: 1rem; padding: .6rem; }
+  .hero .hero-search label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  html[data-sm="live"] .hero:not([data-sm-state="static"]) .hero-progress { margin-top: 1rem; }
+}
+@media (min-width: 768px) and (max-height: 480px) {
+  .hero .hero-sub { display: none; }
 }
 
 /* ---------- statement ---------- */
@@ -331,7 +343,7 @@ html[data-sm="live"] .overseas:not([data-sm-state="static"]) .sm-poster-caption 
 
 /* ---------- featured properties (from the CMS, see the script at the end of home.html) ---------- */
 .featured { padding: clamp(4rem, 10vh, 7rem) 0; }
-.featured .head { display: flex; justify-content: space-between; align-items: baseline; gap: 2rem; flex-wrap: wrap; }
+.featured .head { display: flex; justify-content: space-between; align-items: baseline; gap: .75rem 2rem; flex-wrap: wrap; }
 .featured-body { margin-top: 2rem; min-height: 8rem; }
 .featured-grid {
   list-style: none; padding: 0; margin: 0;
