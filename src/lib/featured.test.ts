@@ -51,6 +51,21 @@ describe("toFeaturedItems", () => {
     expect(cards.map((c) => c.slug)).toEqual(["l1", "l2", "l3", "l4"]);
   });
 
+  it("leaves the price empty when the CMS only holds a placeholder amount", () => {
+    // Sanity requires a positive price, so unpriced entries carry a placeholder such as 1.
+    const [sale] = toFeaturedItems([listing({ price: 1 })]);
+    expect(sale.priceText).toBe("");
+    const [pre] = toFeaturedItems([development({ priceFrom: 1 })]);
+    expect(pre.priceText).toBe("");
+  });
+
+  it("treats 999 as a placeholder and 1,000 as a real price", () => {
+    const [placeholder] = toFeaturedItems([listing({ status: "For Lease", price: 999 })]);
+    expect(placeholder.priceText).toBe("");
+    const [real] = toFeaturedItems([listing({ status: "For Lease", price: 1000 })]);
+    expect(real.priceText).toBe("\u20B11,000 / mo");
+  });
+
   it("encodes the slug in the href", () => {
     const [card] = toFeaturedItems([listing({ slug: "unit 7b" })]);
     expect(card.href).toBe("/properties/unit%207b");

@@ -9,6 +9,7 @@ export interface FeaturedItem {
   title: string;
   location: string;
   tag: "For Sale" | "For Lease" | "Pre-selling";
+  /** Empty when the CMS only holds a placeholder price; the card then shows no price line. */
   priceText: string;
   imageUrl: string | null;
   imageAlt: string;
@@ -19,6 +20,12 @@ export const FEATURED_COUNT = 4;
 // Listing photos are resolved at width 1600 for the detail pages; a homepage
 // card is at most about 420 px wide, so ask the Sanity CDN for 800.
 const CARD_IMAGE_WIDTH = 800;
+
+// Sanity requires a positive price on every listing and development, so entries
+// without a real price carry a placeholder such as 1. No actual sale price or
+// monthly rent is below 1,000, so anything lower is treated as "no price yet"
+// and the card shows no price line instead of "From ₱1".
+const MIN_REAL_PRICE = 1000;
 
 export function cardImageUrl(url: string): string {
   try {
@@ -49,7 +56,7 @@ export function toFeaturedItems(items: PropertyGridItem[], limit = FEATURED_COUN
         kind: "listing",
         href: `/properties/${encodeURIComponent(item.slug)}`,
         tag: item.status,
-        priceText: formatPrice(item),
+        priceText: item.price >= MIN_REAL_PRICE ? formatPrice(item) : "",
         ...common,
       };
     }
@@ -57,7 +64,7 @@ export function toFeaturedItems(items: PropertyGridItem[], limit = FEATURED_COUN
       kind: "development",
       href: `/developments/${encodeURIComponent(item.slug)}`,
       tag: "Pre-selling",
-      priceText: formatPriceRange(item.priceFrom, item.priceTo),
+      priceText: item.priceFrom >= MIN_REAL_PRICE ? formatPriceRange(item.priceFrom, item.priceTo) : "",
       ...common,
     };
   });

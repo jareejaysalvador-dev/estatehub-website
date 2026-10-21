@@ -403,7 +403,7 @@
       media.appendChild(el('span', 'tag', it.tag));
       a.appendChild(media);
       var text = el('div', 'text');
-      text.appendChild(el('p', 'price', it.priceText));
+      if (it.priceText) { text.appendChild(el('p', 'price', it.priceText)); }
       text.appendChild(el('h3', null, it.title));
       text.appendChild(el('p', 'loc', it.location));
       a.appendChild(text);
