@@ -1,0 +1,70 @@
+/* HERRA motion kit (V2.0): structural reveal styles. Load before the project's own styles; color and type stay in the project's CSS.
+   Everything below applies only under html.mo-on, which motion-head.js or motion.js sets when motion is allowed. Without it (reduced
+   motion, data saver, no IntersectionObserver, script blocked or failed) nothing is hidden and nothing moves. Only opacity and
+   transform animate. Author-facing hooks: --mo-dur, --mo-ease, --mo-dist, --mo-step, --mo-cover, --mo-band-bg, --mo-band-origin (100% rises from the section's bottom edge, 0% wipes down from its top edge), --mo-pad. */
+
+:root { --mo-dur: .7s; --mo-ease: cubic-bezier(.2, .7, .2, 1); --mo-dist: 24px; --mo-step: 70ms; --mo-pad: .14em; }
+@media (max-width: 767px) { :root { --mo-dur: .5s; --mo-dist: 14px; } }
+
+/* fade and rise: the element itself */
+.mo-on [data-reveal="fade"], .mo-on [data-reveal="rise"] {
+  opacity: 0;
+  transition: opacity var(--mo-dur) var(--mo-ease) var(--mo-d, 0ms), transform var(--mo-dur) var(--mo-ease) var(--mo-d, 0ms);
+}
+.mo-on [data-reveal="rise"] { transform: translate3d(0, var(--mo-dist), 0); }
+.mo-on [data-reveal="fade"].mo-in, .mo-on [data-reveal="rise"].mo-in { opacity: 1; transform: none; }
+
+/* words, lines and fill: motion.js wraps each word in .mo-m (a clip box) around .mo-w (the moving word) */
+.mo-m { display: inline-block; overflow: hidden; overflow: clip; vertical-align: top; padding: var(--mo-pad) 0; margin: calc(var(--mo-pad) * -1) 0; }
+.mo-w { display: inline-block; }
+
+.mo-on [data-reveal="words"] .mo-w {
+  opacity: 0; transform: translate3d(0, .6em, 0);
+  transition: opacity var(--mo-dur) var(--mo-ease) calc(var(--mo-d, 0ms) + min(var(--i, 0), 24) * var(--mo-step)),
+              transform var(--mo-dur) var(--mo-ease) calc(var(--mo-d, 0ms) + min(var(--i, 0), 24) * var(--mo-step));
+}
+.mo-on [data-reveal="words"].mo-in .mo-w { opacity: 1; transform: none; }
+
+.mo-on [data-reveal="lines"] .mo-w {
+  transform: translate3d(0, 115%, 0);
+  transition: transform calc(var(--mo-dur) * 1.3) cubic-bezier(.2, .8, .1, 1) calc(var(--mo-d, 0ms) + var(--l, 0) * 110ms);
+}
+.mo-on [data-reveal="lines"].mo-in .mo-w { transform: none; }
+
+/* fill: the words light up in order as the paragraph scrolls through the viewport (motion.js writes --mo-p on the element) */
+.mo-on [data-reveal="fill"] .mo-w { opacity: clamp(.16, calc(.16 + (var(--mo-p, 0) * (var(--n, 40) + 6) - var(--i, 0)) * .84), 1); }
+
+/* wipe: a cover slides off a wrapper and its media settles. Put it on a wrapper (figure, div); a bare img cannot carry the cover. */
+.mo-on [data-reveal="wipe"] { position: relative; overflow: hidden; overflow: clip; }
+.mo-on [data-reveal="wipe"]::after {
+  content: ""; position: absolute; inset: 0; background: var(--mo-cover, Canvas); transform-origin: 50% 0; pointer-events: none;
+  transition: transform calc(var(--mo-dur) * 1.3) cubic-bezier(.7, 0, .2, 1) var(--mo-d, 0ms);
+}
+.mo-on [data-reveal="wipe"] > img, .mo-on [data-reveal="wipe"] > picture, .mo-on [data-reveal="wipe"] > video, .mo-on [data-reveal="wipe"] > canvas, .mo-on [data-reveal="wipe"] > svg {
+  transform: scale(1.08); transition: transform calc(var(--mo-dur) * 1.8) var(--mo-ease) var(--mo-d, 0ms);
+}
+.mo-on [data-reveal="wipe"].mo-in::after { transform: scaleY(0); }
+.mo-on [data-reveal="wipe"].mo-in > img, .mo-on [data-reveal="wipe"].mo-in > picture, .mo-on [data-reveal="wipe"].mo-in > video,
+.mo-on [data-reveal="wipe"].mo-in > canvas, .mo-on [data-reveal="wipe"].mo-in > svg { transform: none; }
+
+/* band: a section's own background rises as the section enters. Set the background as --mo-band-bg instead of background.
+   Pair the section's text reveals with data-reveal-delay so the text appears as the band covers it. */
+[data-transition="band"] { background: var(--mo-band-bg, transparent); }
+.mo-on [data-transition="band"] { position: relative; isolation: isolate; background: transparent; }
+.mo-on [data-transition="band"]::before {
+  content: ""; position: absolute; inset: 0; z-index: -1; background: var(--mo-band-bg, transparent);
+  transform: scaleY(0); transform-origin: 50% var(--mo-band-origin, 100%);
+  transition: transform calc(var(--mo-dur) * 1.5) cubic-bezier(.7, 0, .2, 1) var(--mo-d, 0ms);
+}
+.mo-on [data-transition="band"].mo-in::before { transform: none; }
+
+/* An element the kit refused to gate (a link, button, form, nav, price or opt-out) is at rest at once, with no transition. */
+[data-mo^="skipped"], [data-mo^="skipped"]::after { opacity: 1 !important; transform: none !important; transition: none !important; }
+[data-mo^="skipped"]::after { display: none !important; }
+
+/* Belt and braces: reduced motion and data saver show everything at rest even if a script sets mo-on by mistake. */
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal], [data-reveal] .mo-w { opacity: 1 !important; transform: none !important; transition: none !important; }
+  [data-reveal]::after, [data-transition]::before { display: none !important; }
+  [data-transition="band"] { background: var(--mo-band-bg, transparent) !important; }
+}
