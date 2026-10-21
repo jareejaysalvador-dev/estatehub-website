@@ -92,11 +92,19 @@ a { color: inherit; }
 }
 .site-head.is-solid { background: rgba(9, 17, 32, .82); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
 .site-head.menu-open { background: var(--ink); } /* phone menu open: the header and the sheet read as one surface */
-.site-head .lockup img { height: 32px; width: auto; }
+/* The logo file is trimmed to its artwork (no empty margin baked in), so this height is the real tile height. 40px stays inside the
+   Contact button's 40.6px, so the header does not get taller. The logo is the one part of the row allowed to shrink. */
+.site-head .lockup { display: block; flex: 0 1 auto; min-width: 0; line-height: 0; }
+.site-head .lockup img { display: block; height: 40px; width: auto; max-width: 100%; object-fit: contain; object-position: left center; }
+.site-head > nav { flex: none; }
 .site-head > nav ul { list-style: none; display: flex; gap: 2rem; margin: 0; padding: 0; }
 .site-head > nav a { text-decoration: none; font-size: .9375rem; font-weight: 500; opacity: .86; }
 .site-head > nav a:hover { opacity: 1; border-bottom: 1px solid var(--mint); }
-.site-head .btn { padding: .8rem 1.1rem; font-size: .9375rem; }
+.site-head .btn { flex: none; white-space: nowrap; padding: .8rem 1.1rem; font-size: .9375rem; }
+@media (min-width: 768px) and (max-width: 899px) { /* tablet: the menu links and the logo share one row */
+  .site-head .lockup img { height: 32px; }
+  .site-head > nav ul { gap: 1.5rem; }
+}
 
 /* phone menu (under 768px): a button beside "Contact us" opens a sheet under the header. From 768px the inline nav above shows and
    all three pieces below stay display:none, so the desktop header is untouched. They are interactive, so none of them carries data-reveal. */
@@ -120,7 +128,9 @@ a { color: inherit; }
   .site-head { gap: 0; }
   .site-head > nav { display: none; }
   .site-head .lockup { margin-right: 1rem; }
-  .site-head .lockup img { height: 28px; }
+  /* the logo gets the width left beside "Contact us" and the menu button: 36px tall (as tall as the button) when there is room, smaller on
+     narrower phones. The calc is that width at the normal text size; the shrink on .lockup covers a larger text size. */
+  .site-head .lockup img { height: min(36px, calc(18.69vw - 36.6px)); }
   .site-head .btn { margin-left: auto; padding: .7rem .95rem; font-size: .875rem; }
   /* a 44px tap area that sits 4px from "Contact us", puts the three bars on the page gutter, and is no taller than the button, so the header keeps its height */
   .menu-toggle { display: inline-flex; margin: -4px -12px -4px 4px; }
@@ -150,7 +160,7 @@ a { color: inherit; }
 }
 @media (max-width: 304px) { /* very narrow screens (a folded foldable is about 280px): keep logo, Contact us and the menu button on one line */
   .site-head .lockup { margin-right: .5rem; }
-  .site-head .lockup img { height: 24px; }
+  .site-head .lockup img { height: calc(18.69vw - 34.2px); }
   .site-head .btn { padding: .7rem .8rem; }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -442,7 +452,8 @@ html[data-sm="live"] .overseas:not([data-sm-state="static"]) .sm-poster-caption 
 /* ---------- footer ---------- */
 .site-foot { background: var(--ink); color: var(--muted-on-dark); padding: 3.5rem 0 2.5rem; border-top: 1px solid var(--rule-on-dark); font-size: .9375rem; }
 .site-foot .grid { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) minmax(0, 1fr); gap: 2rem; }
-.site-foot .lockup img { height: 30px; width: auto; }
+.site-foot .lockup { display: inline-block; line-height: 0; }
+.site-foot .lockup img { display: block; height: 40px; width: auto; max-width: 100%; object-fit: contain; object-position: left center; }
 .site-foot .tag { margin-top: 1.25rem; font-family: var(--font-display); font-size: 1.25rem; color: var(--text-on-dark); }
 .site-foot h4 { font-size: .8125rem; letter-spacing: .12em; text-transform: uppercase; font-weight: 500; margin-bottom: .9rem; color: var(--muted-on-dark); }
 .site-foot ul { list-style: none; padding: 0; display: grid; gap: .5rem; }
